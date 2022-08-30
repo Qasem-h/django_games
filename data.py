@@ -12,14 +12,18 @@ except ImportError:  # pragma: no cover
 
 
 GAMES = {
-    "ANW": _("New World"),
-    "ALA": _("Lost Ark"),
-    "WCT": _("World Of Warcraft Classic TBC"),
-    "WCS": _("World Of Warcraft Classic SOM"),
-    "WCW": _("World Of Warcraft Classic WOTLK"),
-    "POE": _("Path Of Exile"),
-    "F14": _("Final Fantasy XIV"),
+    "NW":  _("New World"),
+    "LA":  _("Lost Ark"),
+    "D2":  _("Destiny 2"),
+    "WWR": _("World of Warcraft"),
+    "WWC": _("World of Warcraft Classic"),
+    "POE": _("Path of Exile"),
+    "F14": _("FINAL FANTASY XIV: A Realm Reborn"),
     "ESO": _("The Elder Scroll Online"),
+    "OSR": _("Old School RuneScape"),
+    "RS3": _("RuneScape 3"),
+    "GW2": _("Guild Wars 2"),
+    		
 }
 
 
