@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-games"
+version = "0.1.0"
+description = "A Django application providing Game, Region, Server, and Faction fields for MMORPGs and virtual marketplaces."
+readme = "README.md"
+authors = [{ name = "Qasem Hajizadeh", email = "gasemhacker@gmail.com" }]
+license = { text = "MIT" }
+keywords = ["django", "games", "mmorpg", "fields", "regions", "servers", "factions"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Framework :: Django :: 5.2",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "Django>=5.0,<6.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Qasem-h/django_games"
+Source = "https://github.com/Qasem-h/django_games"
+Issues = "https://github.com/Qasem-h/django_games/issues"
