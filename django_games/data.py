@@ -72,7 +72,7 @@ GAMES: "Dict[str, StrPromise]" = {
     "ARC": _("ArcheAge"),
     "ARW": _("ArcheAge War"),
     "BLS": _("Blade & Soul"),
-    "BLS": _("Blade & Soul"),
+    "BS2": _("Blade & Soul 2"),
     "BDO": _("Black Desert Online"),
     "BDM": _("Black Desert Mobile"),
     "CON": _("Conquer Online"),
