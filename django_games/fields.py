@@ -152,7 +152,7 @@ class Game:
         if not self.code:
             return ""
         x, y = list(self.code.lower())
-        return f"icon-sprite icon-{x} icon-_{y}"
+        return f"icon-sprite icon-game icon-{self.code.lower()}"
 
     @property
     def unicode_icon(self):

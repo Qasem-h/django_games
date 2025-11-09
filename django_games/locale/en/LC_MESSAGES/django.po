@@ -20,7 +20,7 @@ msgstr ""
 
 # ============================
 # ✅ Existing Game Entries…
-# (Your entire country list stays untouched)
+# (Your entire game list stays untouched)
 # ============================
 
 #: games.py
