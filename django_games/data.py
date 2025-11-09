@@ -1,17 +1,8 @@
 #!/usr/bin/env python
-"""
-Self-contained game codes list (Hybrid Standard) — NOV 09 2025 FINAL FIXED
-- 100% real community-standard codes (Odealo, G2G, Eldorado, PlayerAuctions, IGVault)
-- Future expansions correct: MDN (Midnight), TLT (The Last Titan)
-- Diablo IV: Vessel of Hatred = D4VH
-- Tarisland = TRS, Last Epoch = LEP
-- Full backward compatibility via ALT_CODES (zero 404s)
-- All icons will match (assuming your static/icons/ uses these codes)
-- Validators pass cleanly
-"""
-
+import glob
 import os
 from typing import TYPE_CHECKING, Dict
+
 from django_games.base import GamesBase
 
 if TYPE_CHECKING:
@@ -20,6 +11,7 @@ if TYPE_CHECKING:
 try:
     from django.utils.translation import gettext_lazy as _
 except ImportError:  # pragma: no cover
+    # Allows this module to be executed without Django installed.
     def _(message: str) -> "StrPromise":
         return message  # type: ignore
 
@@ -222,62 +214,111 @@ ALT_CODES: Dict[str, str] = {
 }
 
 
-# =======================================================
-# CSV SELF-GENERATOR (optional)
-# =======================================================
-def self_generate(output_filename: str = __file__, filename: str = "games.csv") -> None:  # pragma: no cover
-    """Regenerate this file from games.csv (name,code)"""
-    import csv, re, unicodedata
+def self_generate(
+    output_filename: str, filename: str = "iso3166-1.csv"
+):  # pragma: no cover
+    """
+    The following code can be used for self-generation of this file.
+
+    It requires a UTF-8 CSV file containing the short ISO name and two letter
+    game code as the first two columns.
+    """
+    import csv
+    import re
+    import unicodedata
+
     games = []
-    with open(filename, encoding="utf-8") as f:
-        for row in csv.reader(f):
-            if not row or not row[0].strip():
-                continue
-            name = re.sub(r"\s+", " ", row[0].strip())
-            code = row[1].strip().upper()
-            games.append((name, code))
-    games.sort(key=lambda g: unicodedata.normalize("NFKD", g[0]).encode("ascii", "ignore"))
-    with open(output_filename, "w", encoding="utf-8") as f:
-        f.write("#!/usr/bin/env python\n# AUTO-GENERATED — DO NOT EDIT MANUALLY\nGAMES = {\n")
-        for name, code in games:
-            f.write(f'    "{code}": _("{name}"),\n')
-        f.write("}\n")
+    with open(filename) as csv_file:
+        for row in csv.reader(csv_file):
+            name = row[0].rstrip("*")
+            name = re.sub(r"\(the\)", "", name)
+            name = re.sub(r" +\[(.+)\]", r" (\1)", name)
+            if name:
+                games.append((name, row[1], row[2], int(row[3])))
+    with open(__file__) as source_file:
+        contents = source_file.read()
+
+    # Sort games.
+    def sort_key(row):
+        return (
+            unicodedata.normalize("NFKD", row[0])
+            .encode("ascii", "ignore")
+            .decode("ascii")
+        )
+
+    games = sorted(games, key=sort_key)
+
+    # Write games.
+    match = re.match(
+        r"(.*\nGAMES(?:: [^\n]+)? = \{\n)(.*?)(\n\}.*)", contents, re.DOTALL
+    )
+    if not match:
+        raise ValueError('Expected a "GAMES =" section in the source file!')
+    bits = match.groups()
+    game_list = []
+    for game_row in games:
+        name = game_row[0].replace('"', r"\"").strip()
+        game_list.append(f'    "{game_row[1]}": _("{name}"),')
+    content = bits[0]
+    content += "\n".join(game_list)
+    # Write alt codes.
+    alt_match = re.match(
+        r"(.*\nALT_CODES(?:: [^\n]+)? = \{\n)(.*)(\n\}.*)", bits[2], re.DOTALL
+    )
+    if not alt_match:
+        raise ValueError('Expected an "ALT_CODES =" section in the source file!')
+    alt_bits = alt_match.groups()
+    alt_list = [
+        f'    "{game_row[1]}": ("{game_row[2]}", {game_row[3]}),'
+        for game_row in games
+    ]
+    content += alt_bits[0]
+    content += "\n".join(alt_list)
+    content += alt_bits[2]
+    # Generate file.
+    with open(output_filename, "w") as output_file:
+        output_file.write(content)
+    return games
 
 
-# =======================================================
-# VALIDATORS
-# =======================================================
-def check_icons(verbosity: int = 1) -> None:
+def check_icons(verbosity: int = 1):
+    files = {}
     this_dir = os.path.dirname(__file__)
-    icon_dir = os.path.join(this_dir, "static", "icons")
-    if not os.path.exists(icon_dir):
-        print("Icon directory not found — skipping check.")
-        return
-    files = {os.path.splitext(f)[0].upper() for f in os.listdir(icon_dir) if f.endswith(".svg")}
-    missing = set(GAMES) - files
-    if missing:
-        print("Missing icons:")
-        for code in sorted(missing):
-            print(f"  {code} ({GAMES[code]})")
-    elif verbosity:
-        print("All canonical icons present ✓")
+    for path in glob.glob(os.path.join(this_dir, "static", "icons", "*.gif")):
+        files[os.path.basename(os.path.splitext(path)[0]).upper()] = path
 
-    extras = files - (set(GAMES) | set(ALT_CODES.values()))
-    if extras:
-        print("\nUnused icon files:")
-        for code in sorted(extras):
-            print(f"  {code}.svg")
+    icons_missing = set(GAMES) - set(files)
+    if icons_missing:  # pragma: no cover
+        print("The following game codes are missing a icon:")
+        for code in sorted(icons_missing):
+            print(f"  {code} ({GAMES[code]})")
+    elif verbosity:  # pragma: no cover
+        print("All game codes have icons. :)")
+
+    code_missing = set(files) - set(GAMES)
+    # Special-case EU and __
+    for special_code in ("EU", "__"):
+        code_missing.discard(special_code)
+    if code_missing:  # pragma: no cover
+        print("")
+        print("The following icons don't have a matching game code:")
+        for path in sorted(code_missing):
+            print(f"  {path}")
 
 
 def check_common_names() -> None:
-    missing = set(GamesBase.COMMON_NAMES) - (set(GAMES) | set(ALT_CODES))
-    if missing:
-        print(f"{len(missing)} unmapped common aliases: {sorted(missing)}")
-    else:
-        print("All common aliases mapped ✓")
+    common_names_missing = set(GamesBase.COMMON_NAMES) - set(GAMES)
+    if common_names_missing:  # pragma: no cover
+        print("")
+        print("The following common names do not match an official game code:")
+        for code in sorted(common_names_missing):
+            print(f"  {code}")
 
 
 if __name__ == "__main__":  # pragma: no cover
-    print(f"{len(GAMES)} canonical games | {len(ALT_CODES)} aliases registered.")
+    games = self_generate(__file__)
+    print(f"Wrote {len(games)} games.")
+
+    print("")
     check_icons()
     check_common_names()

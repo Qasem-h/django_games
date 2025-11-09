@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from django_stubs_ext import StrPromise
 
+
 try:
     from django.utils.translation import gettext_lazy as _
 except ImportError:  # pragma: no cover
     # Allows this module to be executed without Django installed.
     def _(message: str) -> "StrPromise":
         return message  # type: ignore
-
 
 class GamesBase:
     """

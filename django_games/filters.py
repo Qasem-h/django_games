@@ -5,10 +5,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 class GameFilter(admin.FieldListFilter):
-    """
-    A game filter for Django admin that only returns a list of games
-    related to the model.
-    """
 
     title = _("Game")  # type: ignore
 

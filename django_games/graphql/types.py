@@ -5,7 +5,7 @@ import graphene  # type: ignore
 
 class Game(graphene.ObjectType):
     """
-    GraphQL type representing a game entry, similar to Country type in django-countries.
+    GraphQL type representing a game entry, similar to Game type in django-games.
     """
 
     name = graphene.String(description="Full game name, e.g. 'World of Warcraft'.")

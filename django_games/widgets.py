@@ -1,5 +1,5 @@
 import copy
-from typing import Any, Dict, List, Union
+from typing import Dict, List, Union
 from urllib import parse as urlparse
 
 import django
@@ -10,9 +10,8 @@ from django.utils.safestring import mark_safe
 
 from django_games.conf import settings
 
-# JavaScript handler that updates the displayed icon when a game is selected.
 GAME_CHANGE_HANDLER = (
-    "var e=document.getElementById('icon_' + this.id);"
+    "var e=document.getElementById('icon_' + this.id); "
     "if (e) e.src = '%s'"
     ".replace('{code}', this.value.toLowerCase() || '__')"
     ".replace('{code_upper}', this.value.toUpperCase() || '__');"
@@ -21,91 +20,102 @@ GAME_CHANGE_HANDLER = (
 ChoiceList = List[List[Union[int, str]]]
 
 
-# === Lazy Choices Support (for compatibility with Django < 5.0) ===
 class LazyChoicesMixin:
     if django.VERSION < (5, 0):
 
         def get_choices(self) -> ChoiceList:
-            """Resolve lazy choices only when accessed."""
+            """
+            When it's time to get the choices, if it was a lazy then figure it out
+            now and memoize the result.
+            """
             if isinstance(self._choices, Promise):
-                self._choices = list(self._choices)
+                self._choices: ChoiceList = list(self._choices)
             return self._choices
 
-        def set_choices(self, value: ChoiceList) -> None:
-            self._choices = value
+        def set_choices(self, value: ChoiceList):
+            self._set_choices(value)
 
         choices = property(get_choices, set_choices)
+
+        def _set_choices(self, value: ChoiceList):
+            self._choices = value
 
 
 class LazySelectMixin(LazyChoicesMixin):
     attrs: Dict[str, str]
 
     if django.VERSION < (5, 0):
-        def __deepcopy__(self, memo: Dict[int, Any]):
+
+        def __deepcopy__(self, memo):
             obj = copy.copy(self)
             obj.attrs = self.attrs.copy()
             obj.choices = copy.copy(self._choices)
             memo[id(self)] = obj
             return obj
 
-    def use_required_attribute(self, initial: Any) -> bool:
+    def use_required_attribute(self, initial):  # type: ignore[no-untyped-def]
         """
-        Override Django’s default logic to allow for blank separators in game lists.
-        Prevents incorrect omission of `required` when a blank option isn’t first.
+        Override Django's default behavior to check if ANY choice has an empty
+        value, not just the first one. This is necessary for CGAMES_FIRST_BREAK
+        which puts a blank separator option in the middle of the choices list.
+
+        Django's default implementation only checks the first choice, but when
+        CGAMES_FIRST_BREAK is used, the blank separator appears after the
+        first games, causing the required attribute to be incorrectly omitted.
         """
-        if self.is_hidden:
+        # Don't use required attribute for hidden widgets
+        if self.is_hidden:  # type: ignore[attr-defined]
             return False
-        if self.allow_multiple_selected:
+
+        # 'required' is always okay for <select multiple>.
+        if self.allow_multiple_selected:  # type: ignore[attr-defined]
             return True
+
+        # Check if any choice has an empty value, not just the first one
         return any(
-            self._choice_has_empty_value(choice)
+            self._choice_has_empty_value(choice)  # type: ignore[attr-defined]
             for choice in self.choices
         )
 
 
-class LazySelect(LazySelectMixin, widgets.Select):
-    """Single-select widget that supports lazy translated choices."""
+class LazySelect(LazySelectMixin, widgets.Select):  # type: ignore
+    """
+    A form Select widget that respects choices being a lazy object.
+    """
 
 
-class LazySelectMultiple(LazySelectMixin, widgets.SelectMultiple):
-    """Multi-select widget that supports lazy translated choices."""
+class LazySelectMultiple(LazySelectMixin, widgets.SelectMultiple):  # type: ignore
+    """
+    A form SelectMultiple widget that respects choices being a lazy object.
+    """
 
 
-# === Game Selection Widget with Icon Preview ===
 class GameSelectWidget(LazySelect):
-    """
-    A form Select widget that displays the game’s icon next to the dropdown
-    and updates dynamically when the user selects a different game.
-    """
-
     def __init__(self, *args, **kwargs) -> None:
         self.layout = kwargs.pop("layout", None) or (
             '{widget}<img class="game-select-icon" id="{icon_id}" '
-            'style="margin: 6px 4px 0" src="{game.icon}">'
+            'style="margin: 6px 4px 0" '
+            'src="{game.icon}">'
         )
         super().__init__(*args, **kwargs)
 
-    def render(self, name: str, value: Any, attrs: Dict[str, Any] | None = None, renderer=None) -> str:
+    def render(self, name, value, attrs=None, renderer=None):
         from django_games.fields import Game
 
         attrs = attrs or {}
-        widget_id = attrs.get("id", "")
+        widget_id = attrs and attrs.get("id")
         if widget_id:
             icon_id = f"icon_{widget_id}"
             attrs["onchange"] = GAME_CHANGE_HANDLER % urlparse.urljoin(
-                settings.STATIC_URL, settings.GAMES_ICON_URL
+                settings.STATIC_URL, settings.CGAMES_ICON_URL
             )
         else:
             icon_id = ""
-
         widget_render = super().render(name, value, attrs, renderer=renderer)
         game = value if isinstance(value, Game) else Game(value or "__")
-
         with game.escape:
-            return mark_safe(
+            return mark_safe(  # nosec
                 self.layout.format(
-                    widget=widget_render,
-                    game=game,
-                    icon_id=escape(icon_id),
+                    widget=widget_render, game=game, icon_id=escape(icon_id)
                 )
             )

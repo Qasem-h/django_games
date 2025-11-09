@@ -1,20 +1,19 @@
 #!/usr/bin/env python
 import itertools
 import re
-from collections.abc import Iterable
 from contextlib import contextmanager
 from gettext import NullTranslations
 from typing import (
     TYPE_CHECKING,
     Any,
+    Callable,
     Dict,
+    Iterable,
     List,
-    Literal,
     NamedTuple,
     Optional,
     Set,
     Tuple,
-    TypedDict,
     Union,
     cast,
     overload,
@@ -23,6 +22,7 @@ from typing import (
 from asgiref.local import Local
 from django.utils.encoding import force_str
 from django.utils.translation import override, trans_real
+from typing_extensions import Literal, TypedDict
 
 from django_games.conf import settings
 
@@ -30,20 +30,6 @@ from .base import GamesBase
 
 if TYPE_CHECKING:
     from django_stubs_ext import StrPromise
-
-    class ComplexGameName(TypedDict):
-        name: "StrPromise"
-        names: "List[StrPromise]"
-        alpha3: str
-        numeric: int
-        ioc_code: str
-
-    GameName = Union[
-        StrPromise,  # type: ignore
-        ComplexGameName,
-    ]
-    GameCode = Union[str, int, None]
-
 
 try:
     import pyuca  # type: ignore
@@ -85,17 +71,29 @@ def no_translation_fallback():
         return
     # Ensure the empty fallback translator has been installed.
     catalog = trans_real.catalog()
-    original_fallback = catalog._fallback  # type: ignore
+    original_fallback = catalog._fallback
     if not isinstance(original_fallback, EmptyFallbackTranslator):
         empty_fallback_translator = EmptyFallbackTranslator()
-        empty_fallback_translator._fallback = original_fallback  # type: ignore
-        catalog._fallback = empty_fallback_translator  # type: ignore
+        empty_fallback_translator._fallback = original_fallback
+        catalog._fallback = empty_fallback_translator
     # Set the translation state to not use a fallback while inside this context.
     _translation_state.fallback = False
     try:
         yield
     finally:
         _translation_state.fallback = True
+
+
+class ComplexGameName(TypedDict):
+    name: "StrPromise"
+    names: "List[StrPromise]"
+    alpha3: str
+    numeric: int
+    ioc_code: str
+
+
+GameName = Union["StrPromise", ComplexGameName]
+GameCode = Union[str, int, None]
 
 
 class AltCodes(NamedTuple):
@@ -123,7 +121,7 @@ class Games(GamesBase):
     the game ``code`` and ``name``), sorted by name.
     """
 
-    _games: Dict[str, "GameName"]
+    _games: Dict[str, GameName]
     _alt_codes: Dict[str, AltCodes]
 
     def get_option(self, option: str):
@@ -137,7 +135,7 @@ class Games(GamesBase):
         return getattr(settings, f"GAMES_{option.upper()}")
 
     @property
-    def games(self) -> Dict[str, "GameName"]:
+    def games(self) -> Dict[str, GameName]:
         """
         Return the a dictionary of games, modified by any overriding
         options.
@@ -145,15 +143,18 @@ class Games(GamesBase):
         The result is cached so future lookups are less work intensive.
         """
         if not hasattr(self, "_games"):
-            only: Iterable[Union[str, Tuple[str, StrPromise]]] = self.get_option("only")
+            only: "Iterable[Union[str, Tuple[str, StrPromise]]]" = self.get_option(
+                "only"
+            )
             only_choices = True
-            # Originally used ``only`` as a dict, still supported.
-            if only and not isinstance(only, dict):
-                for item in only:
-                    if isinstance(item, str):
-                        only_choices = False
-                        break
-            self._shadowed_names: Dict[str, List[StrPromise]] = {}
+            if only:
+                # Originally used ``only`` as a dict, still supported.
+                if not isinstance(only, dict):
+                    for item in only:
+                        if isinstance(item, str):
+                            only_choices = False
+                            break
+            self._shadowed_names: "Dict[str, List[StrPromise]]" = {}
             if only and only_choices:
                 self._games = dict(only)  # type: ignore
             else:
@@ -181,7 +182,7 @@ class Games(GamesBase):
                 )
                 if override:
                     _games = cast(
-                        "Dict[str, Union[GameName, None]]", self._games.copy()
+                        Dict[str, Union[GameName, None]], self._games.copy()
                     )
                     _games.update(override)
                     self._games = {
@@ -265,7 +266,7 @@ class Games(GamesBase):
     def shadowed_names(self):
         if not getattr(self, "_shadowed_names", False):
             # Getting games populates shadowed names.
-            self.games  # noqa: B018
+            self.games
         return self._shadowed_names
 
     def translate_code(self, code: str, ignore_first: Optional[List[str]] = None):
@@ -274,7 +275,10 @@ class Games(GamesBase):
         """
         game = self.games[code]
         if isinstance(game, dict):
-            names = game["names"] if "names" in game else [game["name"]]
+            if "names" in game:
+                names = game["names"]
+            else:
+                names = [game["name"]]
         else:
             names = [game]
         if ignore_first and code in ignore_first:
@@ -282,7 +286,7 @@ class Games(GamesBase):
         for name in names:
             yield self.translate_pair(code, name)
 
-    def translate_pair(self, code: str, name: Optional["GameName"] = None):
+    def translate_pair(self, code: str, name: Optional[GameName] = None):
         """
         Force a game to the current activated translation.
 
@@ -292,7 +296,7 @@ class Games(GamesBase):
             name = self.games[code]
         if isinstance(name, dict):
             if "names" in name:
-                fallback_names: List[StrPromise] = name["names"][1:]
+                fallback_names: "List[StrPromise]" = name["names"][1:]
                 name = name["names"][0]
             else:
                 fallback_names = []
@@ -361,7 +365,7 @@ class Games(GamesBase):
         # Return sorted game list.
         yield from sorted(games, key=sort_key)
 
-    def alpha2(self, code: "GameCode") -> str:
+    def alpha2(self, code: GameCode) -> str:
         """
         Return the normalized game code when passed any type of ISO 3166-1
         game code.
@@ -372,37 +376,33 @@ class Games(GamesBase):
 
         If no match is found, returns an empty string.
         """
+        find: Optional[Callable]
         code_str = force_str(code).upper()
-        # Check if the code exists directly in games first, before trying
-        # to resolve it as an alternative code (alpha3/numeric). This allows
-        # custom game codes in GAMES_OVERRIDE to work correctly, even
-        # if they match the format of alternative codes (issue #474).
-        if code_str in self.games:
-            return code_str
-
-        find_index: Optional[int]
-        find_value: Union[str, int, None]
-
         if code_str.isdigit():
-            find_index = 1
-            find_value = int(code_str)
+            lookup_numeric = int(code_str)
+
+            def find(alt_codes):
+                return alt_codes[1] == lookup_numeric
+
         elif len(code_str) == 3:
-            find_index = 0
-            find_value = code_str
+            lookup_alpha3 = code_str
+
+            def find(alt_codes) -> bool:
+                return alt_codes[0] == lookup_alpha3
+
         else:
-            find_index = None
-            find_value = None
-        if find_index is not None:
+            find = None
+        if find:
             code_str = ""
             for alpha2, alt_codes in self.alt_codes.items():
-                if alt_codes[find_index] == find_value:
+                if find(alt_codes):
                     code_str = alpha2
                     break
         if code_str in self.games:
             return code_str
         return ""
 
-    def name(self, code: "GameCode") -> str:
+    def name(self, code: GameCode) -> str:
         """
         Return the name of a game, based on the code.
 
@@ -421,7 +421,8 @@ class Games(GamesBase):
         regex: Literal[False] = False,
         language: str = "en",
         insensitive: bool = True,
-    ) -> str: ...
+    ) -> str:
+        ...
 
     @overload
     def by_name(
@@ -431,7 +432,8 @@ class Games(GamesBase):
         regex: Literal[True],
         language: str = "en",
         insensitive: bool = True,
-    ) -> Set[str]: ...
+    ) -> Set[str]:
+        ...
 
     def by_name(
         self,
@@ -469,7 +471,7 @@ class Games(GamesBase):
             for code, check_game in self.games.items():
                 if isinstance(check_game, dict):
                     if "names" in check_game:
-                        check_names: List[StrPromise] = check_game["names"]
+                        check_names: "List[StrPromise]" = check_game["names"]
                     else:
                         check_names = [check_game["name"]]
                 else:
@@ -499,7 +501,7 @@ class Games(GamesBase):
             return code_list
         return ""
 
-    def alpha3(self, code: "GameCode") -> str:
+    def alpha3(self, code: GameCode) -> str:
         """
         Return the ISO 3166-1 three letter game code matching the provided
         game code.
@@ -514,10 +516,16 @@ class Games(GamesBase):
         return alpha3 or ""
 
     @overload
-    def numeric(self, code: Union[str, int, None]) -> Optional[int]: ...
+    def numeric(
+        self, code: Union[str, int, None], padded: Literal[False] = False
+    ) -> Optional[int]:
+        ...
 
     @overload
-    def numeric(self, code: Union[str, int, None], padded=True) -> Optional[str]: ...
+    def numeric(
+        self, code: Union[str, int, None], padded: Literal[True]
+    ) -> Optional[str]:
+        ...
 
     def numeric(self, code: Union[str, int, None], padded: bool = False):
         """
@@ -537,10 +545,10 @@ class Games(GamesBase):
         if num is None:
             return None
         if padded:
-            return f"{num:03d}"
+            return "%03d" % num
         return num
 
-    def ioc_code(self, code: "GameCode") -> str:
+    def ioc_code(self, code: GameCode) -> str:
         """
         Return the International Olympic Committee three letter code matching
         the provided ISO 3166-1 game code.
