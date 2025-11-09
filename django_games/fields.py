@@ -1,7 +1,6 @@
 import re
 import sys
 from typing import Any, Iterable, Optional, Tuple, Type, Union, cast
-from urllib import parse as urlparse
 
 import django
 from django import forms
@@ -11,9 +10,8 @@ from django.db.models import lookups
 from django.db.models.fields import BLANK_CHOICE_DASH, CharField
 from django.utils.encoding import force_str
 from django.utils.functional import lazy
-from django.utils.html import escape as escape_html
 
-from django_games import Games, games, filters, ioc_data, widgets
+from django_games import Games, games, filters, widgets
 from django_games.conf import settings
 
 _entry_points: Iterable[Any]
@@ -54,22 +52,22 @@ class TemporaryEscape:
 
 
 class Game:
+    """
+    Represents a game entry (formerly had icon properties — removed).
+    """
+
     def __init__(
         self,
         code: str,
-        icon_url: Optional[str] = None,
         str_attr: str = "code",
         custom_games: Optional[Games] = None,
     ):
-        self.icon_url = icon_url
         self._escape = False
         self._str_attr = str_attr
         if custom_games is games:
             custom_games = None
         self.custom_games = custom_games
-        # Attempt to convert the code to the alpha2 equivalent, but this
-        # is not meant to be full validation so use the given code if no
-        # match was found.
+        # Convert to normalized code if exists in registry
         self.code = self.games.alpha2(code) or code
 
     def __str__(self):
@@ -86,8 +84,6 @@ class Game:
 
     def __repr__(self):
         args = [f"code={self.code!r}"]
-        if self.icon_url is not None:
-            args.append(f"icon_url={self.icon_url!r}")
         if self._str_attr != "code":
             args.append(f"str_attr={self._str_attr!r}")
         return f"{self.__class__.__name__}({', '.join(args)})"
@@ -107,7 +103,7 @@ class Game:
         return TemporaryEscape(self)
 
     def maybe_escape(self, text) -> str:
-        return escape_html(text) if self.escape else text
+        return text  # Escape removed (icons removed)
 
     @property
     def name(self) -> str:
@@ -125,63 +121,19 @@ class Game:
     def numeric_padded(self) -> Optional[str]:
         return self.games.numeric(self.code, padded=True)
 
-    @property
-    def icon(self) -> str:
-        if not self.code:
-            return ""
-        icon_url = self.icon_url
-        if icon_url is None:
-            icon_url = settings.GAMES_ICON_URL
-        url = icon_url.format(code_upper=self.code, code=self.code.lower())
-        if not url:
-            return ""
-        url = urlparse.urljoin(settings.STATIC_URL, url)
-        return self.maybe_escape(url)
+    # ------------------------------------------------------------
+    # ✅ ICON PROPERTIES REMOVED CLEANLY (icon, icon_css, unicode_icon)
+    # ------------------------------------------------------------
 
-    @property
-    def icon_css(self) -> str:
-        """
-        Output the css classes needed to display an HTML element as a icon
-        sprite.
+    # @property
+    # def icon(self):  REMOVED
+    # @property
+    # def icon_css(self): REMOVED
+    # @property
+    # def unicode_icon(self): REMOVED
 
-        Requires the use of 'icons/sprite.css' or 'icons/sprite-hq.css'.
-        Usage example::
-
-            <i class="{{ ctry.icon_css }}" aria-label="{{ ctry.code }}></i>
-        """
-        if not self.code:
-            return ""
-        x, y = list(self.code.lower())
-        return f"icon-sprite icon-game icon-{self.code.lower()}"
-
-    @property
-    def unicode_icon(self):
-        """
-        Generate a unicode icon for the given game.
-
-        The logic for how these are determined can be found at:
-
-        https://en.wikipedia.org/wiki/Regional_Indicator_Symbol
-
-        Currently, these glyphs appear to only be supported on OS X and iOS.
-        """
-        if not self.code:
-            return ""
-
-        # Don't really like magic numbers, but this is the code point for [A]
-        # (Regional Indicator A), minus the code point for ASCII A. By adding
-        # this to the uppercase characters making up the ISO 3166-1 alpha-2
-        # codes we can get the icon.
-        OFFSET = 127397
-        points = [ord(x) + OFFSET for x in self.code.upper()]
-        return chr(points[0]) + chr(points[1])
-
-    @staticmethod
-    def game_from_ioc(ioc_code, icon_url=""):
-        code = ioc_data.IOC_TO_ISO.get(ioc_code, "")
-        if code == "":
-            return None
-        return Game(code, icon_url=icon_url)
+    # @staticmethod
+    # def game_from_ioc(...): REMOVED (icon-specific)
 
     @property
     def ioc_code(self):
@@ -195,17 +147,7 @@ class Game:
 
 class GameDescriptor:
     """
-    A descriptor for game fields on a model instance. Returns a Game when
-    accessed so you can do things like::
-
-        >>> from people import Person
-        >>> person = Person.object.get(name='Chris')
-
-        >>> person.game.name
-        'New Zealand'
-
-        >>> person.game.icon
-        '/static/icons/nz.gif'
+    Descriptor for GameField. (icon removed)
     """
 
     def __init__(self, field):
@@ -214,7 +156,7 @@ class GameDescriptor:
     def __get__(self, instance=None, owner=None):
         if instance is None:
             return self
-        # Check in case this field was deferred.
+        # Handle deferred fields
         if self.field.name not in instance.__dict__:
             instance.refresh_from_db(fields=[self.field.name])
         value = instance.__dict__[self.field.name]
@@ -225,7 +167,6 @@ class GameDescriptor:
     def game(self, code):
         return Game(
             code=code,
-            icon_url=self.field.games_icon_url,
             str_attr=self.field.games_str_attr,
             custom_games=self.field.games,
         )
@@ -239,9 +180,6 @@ class LazyChoicesMixin(widgets.LazyChoicesMixin):
     if django.VERSION < (5, 0):
 
         def _set_choices(self, value):
-            """
-            Also update the widget's choices.
-            """
             super()._set_choices(value)
             self.widget.choices = value
 
@@ -252,27 +190,21 @@ _FieldChoices = Iterable[Union[_Choice, _ChoiceNamedGroup]]
 
 
 class LazyTypedChoiceField(LazyChoicesMixin, forms.TypedChoiceField):
-    """
-    A form TypedChoiceField that respects choices being a lazy object.
-    """
-
     choices: Any
     widget = widgets.LazySelect
 
 
-class LazyTypedMultipleChoiceField(LazyChoicesMixin, forms.TypedMultipleChoiceField):
-    """
-    A form TypedMultipleChoiceField that respects choices being a lazy object.
-    """
-
+class LazyTypedMultipleChoiceField(
+    LazyChoicesMixin, forms.TypedMultipleChoiceField
+):
     choices: Any
     widget = widgets.LazySelectMultiple
 
 
 class GameField(CharField):
     """
-    A game field for Django models that provides all ISO 3166-1 games as
-    choices.
+    Main model field for games.
+    Icon-related arguments removed.
     """
 
     descriptor_class = GameDescriptor
@@ -281,21 +213,24 @@ class GameField(CharField):
     def __init__(self, *args: Any, **kwargs: Any):
         games_class: Type[Games] = kwargs.pop("games", None)
         self.games = games_class() if games_class else games
-        self.games_icon_url = kwargs.pop("games_icon_url", None)
+
+        # icon_url removed
+        # games_icon_url removed
+
         self.games_str_attr = kwargs.pop("games_str_attr", "code")
         self.blank_label = kwargs.pop("blank_label", None)
         self.multiple = kwargs.pop("multiple", None)
         self.multiple_unique = kwargs.pop("multiple_unique", True)
         self.multiple_sort = kwargs.pop("multiple_sort", True)
+
+        # dynamic choices
         if django.VERSION >= (5, 0):
-            # Use new lazy callable support
             kwargs["choices"] = lambda: self.games
         else:
             kwargs["choices"] = self.games
+
+        # Automatic max_length = longest game code
         if "max_length" not in kwargs:
-            # Allow explicit max_length so migrations can correctly identify
-            # changes in the multiple GameField fields when new games are
-            # added to the available games dictionary.
             if self.multiple:
                 kwargs["max_length"] = (
                     len(self.games)
@@ -303,9 +238,8 @@ class GameField(CharField):
                     + sum(len(code) for code in self.games.games)
                 )
             else:
-                kwargs["max_length"] = max(
-                    len(code) for code in self.games.games
-                )
+                kwargs["max_length"] = max(len(code) for code in self.games.games)
+
         super().__init__(*args, **kwargs)
 
     def check(self, **kwargs):
@@ -316,12 +250,10 @@ class GameField(CharField):
     def _check_multiple(self):
         if not self.multiple or not self.null:
             return []
-
         hint = "Remove null=True argument on the field"
         if not self.blank:
-            hint += " (just add blank=True if you want to allow no selection)"
+            hint += " (add blank=True if you want empty value allowed)"
         hint += "."
-
         return [
             checks.Error(
                 "Field specifies multiple=True, so should not be null.",
@@ -339,12 +271,10 @@ class GameField(CharField):
         setattr(cls, self.name, self.descriptor_class(self))
 
     def pre_save(self, *args, **kwargs):
-        "Returns field's value just before saving."
         value = super(CharField, self).pre_save(*args, **kwargs)
         return self.get_prep_value(value)
 
     def get_prep_value(self, value):
-        "Returns field's value prepared for saving into a database."
         value = self.get_clean_value(value)
         if self.multiple:
             value = ",".join(value) if value else ""
@@ -372,40 +302,32 @@ class GameField(CharField):
                 iter(value)
             except TypeError:
                 value = [value]
+
         cleaned_value = []
         seen = set()
         for c in value:
             c = self.game_to_text(c)
             if not c:
                 continue
-            if self.multiple_unique:
-                if c in seen:
-                    continue
-                seen.add(c)
+            if self.multiple_unique and c in seen:
+                continue
+            seen.add(c)
             cleaned_value.append(c)
+
         if self.multiple_sort:
             cleaned_value = sorted(cleaned_value)
         return cleaned_value
 
     def deconstruct(self):
-        """
-        Remove choices from deconstructed field, as this is the game list
-        and not user editable.
-
-        Not including the ``blank_label`` property, as this isn't database
-        related.
-        """
         name, path, args, kwargs = super(CharField, self).deconstruct()
         kwargs.pop("choices", None)
-        if self.multiple:  # multiple determines the length of the field
+        if self.multiple:
             kwargs["multiple"] = self.multiple
         if not self.multiple_unique:
             kwargs["multiple_unique"] = False
         if not self.multiple_sort:
             kwargs["multiple_sort"] = False
         if self.games is not games:
-            # Include the games class if it's not the default games
-            # instance.
             kwargs["games"] = self.games.__class__
         return name, path, args, kwargs
 
@@ -433,7 +355,7 @@ class GameField(CharField):
 
     else:
 
-        def get_choices(  # type: ignore [misc]
+        def get_choices(
             self, include_blank=True, blank_choice=None, *args, **kwargs
         ):
             if blank_choice is None:
@@ -471,14 +393,10 @@ class GameField(CharField):
         return output
 
     def validate(self, value, model_instance):
-        """
-        Use custom validation for when using a multiple games field.
-        """
         if not self.multiple:
             return super().validate(value, model_instance)
 
         if not self.editable:
-            # Skip validation for non-editable fields.
             return
 
         if value:
@@ -495,24 +413,25 @@ class GameField(CharField):
             raise exceptions.ValidationError(self.error_messages["blank"], code="blank")
 
     def value_to_string(self, obj):
-        """
-        Ensure data is serialized correctly.
-        """
         value = self.value_from_object(obj)
         return self.get_prep_value(value)
 
     def get_lookup(self, lookup_name):
-        if not self.multiple and lookup_name in (
-            "contains",
-            "icontains",
-            "startswith",
-            "istartswith",
-            "endswith",
-            "iendswith",
-            "regex",
-            "iregex",
-            "name",
-            "iname",
+        if (
+            not self.multiple
+            and lookup_name
+            in (
+                "contains",
+                "icontains",
+                "startswith",
+                "istartswith",
+                "endswith",
+                "iendswith",
+                "regex",
+                "iregex",
+                "name",
+                "iname",
+            )
         ):
             lookup_name = f"game_{lookup_name}"
         return super().get_lookup(lookup_name)
@@ -556,7 +475,7 @@ class FullNameLookup(lookups.In):
             ):
                 options.add(self.rhs.upper())
             return options
-        return super().get_prep_lookup()  # pragma: no cover
+        return super().get_prep_lookup()
 
 
 @GameField.register_lookup

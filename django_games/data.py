@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-import glob
-import os
 from typing import TYPE_CHECKING, Dict
 
 from django_games.base import GamesBase
@@ -140,79 +138,122 @@ GAMES: "Dict[str, StrPromise]" = {
 }
 
 
-# =======================================================
-# ALT_CODES — FULL BACKWARD + COMMON ALIASES (ZERO 404s)
-# =======================================================
-ALT_CODES: Dict[str, str] = {
-    # Retail legacy expansions → retail bucket
-    "WTB": "WOW", "WOT": "WOW", "CAT": "WOW", "MOP": "WOW",
-    "WOD": "WOW", "LEG": "WOW", "BFA": "WOW", "SDL": "WOW",
+ALT_CODES = {
+    # === WORLD OF WARCRAFT RETAIL (100s) ===
+    "WOW": ("WOW", 100),
+    "DFL": ("DFL", 101),
+    "TWW": ("TWW", 102),
+    "MDN": ("MDN", 103),
+    "TLT": ("TLT", 104),
 
-    # Dragonflight alias
-    "DFL": "DFL",
+    # === WORLD OF WARCRAFT CLASSIC (200s) ===
+    "WOWC": ("WOWC", 200),
+    "ERA": ("ERA", 201),
+    "HC": ("HC", 202),
+    "SOD": ("SOD", 203),
 
-    # Classic aliases → NEW canonical code
-    "CLASSIC": "WOWC",
-    "WOWC": "WOWC",
-    "CLA": "WOWC",
+    # === CLASSIC EXPANSIONS (210–230) ===
+    "TBCC": ("TBCC", 210),
+    "WOTLKC": ("WOTLKC", 211),
+    "CATAC": ("CATAC", 212),
+    "MOPC": ("MOPC", 213),
+    "WODC": ("WODC", 214),
+    "LEGC": ("LEGC", 215),
 
-    # Hardcore aliases
-    "HDC": "HC",
-    "WHC": "HC",
+    # === PRIVATE / SPECIAL (240s) ===
+    "PRS": ("PRS", 240),
+    "ANV": ("ANV", 241),
 
-    # Classic expansions
-    "TBC": "TBCC", "WOTLK": "WOTLKC", "CATA": "CATAC",
+    # === DIABLO SERIES (300s) ===
+    "D1": ("D1", 300),
+    "D2R": ("D2R", 301),
+    "D3": ("D3", 302),
+    "D4": ("D4", 303),
+    "D4VH": ("D4VH", 304),
 
-    # Private servers
-    "WOWP": "PRS",
+    # === MAJOR MMORPGS (400–499) ===
+    "AION": ("AION", 400),
+    "AIC": ("AIC", 401),
+    "ALB": ("ALB", 402),
+    "AA": ("AA", 403),
+    "AAW": ("AAW", 404),
+    "BNS": ("BNS", 405),
+    "BNS2": ("BNS2", 406),
+    "BDO": ("BDO", 407),
+    "BDM": ("BDM", 408),
+    "CO": ("CO", 409),
+    "CORE": ("CORE", 410),
+    "DAD": ("DAD", 411),
+    "EVE": ("EVE", 412),
+    "ESO": ("ESO", 413),
+    "FFXIV": ("FFXIV", 414),
+    "GE": ("GE", 415),
+    "GW2": ("GW2", 416),
+    "LARK": ("LARK", 417),
+    "LEP": ("LEP", 418),
+    "L2": ("L2", 419),
+    "L2C": ("L2C", 420),
+    "SKY": ("SKY", 421),
+    "MHW": ("MHW", 422),
+    "MO2": ("MO2", 423),
+    "MOE": ("MOE", 424),
+    "NST": ("NST", 425),
+    "NEW": ("NEW", 426),
+    "NWA": ("NWA", 427),
+    "PKMMO": ("PKMMO", 428),
+    "POE": ("POE", 429),
+    "POE2": ("POE2", 430),
+    "RO": ("RO", 431),
+    "RVD": ("RVD", 432),
+    "RS3": ("RS3", 433),
+    "OSRS": ("OSRS", 434),
+    "RPL": ("RPL", 435),
+    "SRO": ("SRO", 436),
+    "SWTOR": ("SWTOR", 437),
+    "TRS": ("TRS", 438),
+    "TIB": ("TIB", 439),
+    "TL": ("TL", 440),
+    "VR": ("VR", 441),
 
-    # Diablo
-    "DIA": "D1", "DIR": "D2R", "DIT": "D3", "DIV": "D4", "VOH": "D4VH",
+    # === FPS / SURVIVAL / ACTION (500–599) ===
+    "ABI": ("ABI", 500),
+    "APEX": ("APEX", 501),
+    "BS": ("BS", 502),
+    "COC": ("COC", 503),
+    "CR": ("CR", 504),
+    "CS2": ("CS2", 505),
+    "DBD": ("DBD", 506),
+    "D2": ("D2", 507),
+    "DT": ("DT", 508),
+    "EFT": ("EFT", 509),
+    "FIN": ("FIN", 510),
+    "F76": ("F76", 511),
+    "FH5": ("FH5", 512),
+    "GEN": ("GEN", 513),
+    "HSR": ("HSR", 514),
+    "HD": ("HD", 515),
+    "LOL": ("LOL", 516),
+    "MS": ("MS", 517),
+    "NBA2K": ("NBA2K", 518),
+    "OH": ("OH", 519),
+    "OW2": ("OW2", 520),
+    "PAL": ("PAL", 521),
+    "PZ": ("PZ", 522),
+    "QF": ("QF", 523),
+    "REM2": ("REM2", 524),
+    "RUST": ("RUST", 525),
+    "SOT": ("SOT", 526),
+    "TF2": ("TF2", 527),
+    "TFD": ("TFD", 528),
+    "VAL": ("VAL", 529),
+    "WF": ("WF", 530),
+    "WW": ("WW", 531),
+    "ZZZ": ("ZZZ", 532),
 
-    # Final Fantasy XIV aliases
-    "FF14": "FFXIV", "FFX": "FFXIV", "FF": "FFXIV",
-
-    # Shooter/MOBA aliases
-    "VALO": "VAL", "APX": "APEX", "OVW": "OW2", "OW": "OW2", "CSR": "CS2",
-
-    # LOST ARK RENAMED (new canonical LARK)
-    "LOSTARK": "LARK",
-    "LA": "LARK",
-    "LAR": "LARK",
-    "LAK": "LARK",
-
-    # Community shortcuts
-    "PKM": "PKMMO",
-    "POT": "POE2",
-    "OSR": "OSRS",
-    "RSC": "RS3",
-    "TARI": "TRS",
-    "LE": "LEP",
-    "WOR": "ROR",
-
-    # Mortal Online shortcuts
-    "MO": "MO2",
-
-    # Conquer Online variants
-    "CO1": "CO",
-    "CO2": "CO",
-
-    # Palworld
-    "PLW": "PAL",
-
-    # The First Descendant
-    "T1D": "TFD",
-
-    # NBA 2K aliases
-    "NBA": "NBA2K",
-    "2K": "NBA2K",
-
-    # Safety maps
-    "MDN": "MDN",
-    "TLT": "TLT",
-    "D4VH": "D4VH",
+    # === SPECIAL MMORPGs (600s) ===
+    "AQW": ("AQW", 600),
+    "ROR": ("ROR", 601),
 }
-
 
 def self_generate(
     output_filename: str, filename: str = "iso3166-1.csv"
@@ -280,32 +321,6 @@ def self_generate(
         output_file.write(content)
     return games
 
-
-def check_icons(verbosity: int = 1):
-    files = {}
-    this_dir = os.path.dirname(__file__)
-    for path in glob.glob(os.path.join(this_dir, "static", "icons", "*.gif")):
-        files[os.path.basename(os.path.splitext(path)[0]).upper()] = path
-
-    icons_missing = set(GAMES) - set(files)
-    if icons_missing:  # pragma: no cover
-        print("The following game codes are missing a icon:")
-        for code in sorted(icons_missing):
-            print(f"  {code} ({GAMES[code]})")
-    elif verbosity:  # pragma: no cover
-        print("All game codes have icons. :)")
-
-    code_missing = set(files) - set(GAMES)
-    # Special-case EU and __
-    for special_code in ("EU", "__"):
-        code_missing.discard(special_code)
-    if code_missing:  # pragma: no cover
-        print("")
-        print("The following icons don't have a matching game code:")
-        for path in sorted(code_missing):
-            print(f"  {path}")
-
-
 def check_common_names() -> None:
     common_names_missing = set(GamesBase.COMMON_NAMES) - set(GAMES)
     if common_names_missing:  # pragma: no cover
@@ -320,5 +335,4 @@ if __name__ == "__main__":  # pragma: no cover
     print(f"Wrote {len(games)} games.")
 
     print("")
-    check_icons()
     check_common_names()

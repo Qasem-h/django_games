@@ -15,7 +15,6 @@ class AppSettings:
 
 
 class Settings(AppSettings):
-    GAMES_ICON_URL = "icons/{code}.gif"
     GAMES_COMMON_NAMES = True
     GAMES_OVERRIDE: Dict[str, Any] = {}
     GAMES_ONLY: Dict[str, Any] = {}
