@@ -2,124 +2,198 @@
 """
 django_games/ioc_data.py
 ========================
-This module provides mappings similar to IOC <-> ISO codes,
-adapted for MMORPG / ARPG / Sandbox MMO registry usage.
+IOC-style franchise codes → ISO-style canonical game codes.
 
-Each key represents a "franchise" or "series code" (IOC style),
-and maps to a 3-letter game code (ISO style) as defined in django_games.data.GAMES.
+IOC = broad franchise / shorthand grouping (WOW, POE, DIABLO, etc.)
+ISO = exact canonical game code used in django_games.data.GAMES.
+
+This version is fully synchronized with the updated GAMES dataset:
+- WOWC (Classic)
+- LARK (Lost Ark)
+- AIC (Aion Classic)
+- DFL / TWW / MDN / TLT (Retail expansions)
+- All classic expansions unchanged (TBCC, WOTLKC, etc.)
 """
 
-# === IOC-Style (Franchise) to ISO-Style (Game Code) ===
+# =====================================================================
+# ✅ IOC (Franchise / Shorthand) → ISO (Canonical Game Code)
+# =====================================================================
 IOC_TO_ISO = {
-    # === WORLD OF WARCRAFT SERIES ===
+
+    # ==============================
+    # ✅ WORLD OF WARCRAFT (Retail)
+    # ==============================
     "WOW": "WOW",
-    "WRC": "WRC",
-    "WRM": "WRM",
-    "WRD": "WRD",
-    "WRL": "WRL",
-    "WRZ": "WRZ",
-    "WRS": "WRS",
-    "WRF": "WRF",
-    "WRN": "WRN",
-    "WRT": "WRT",
-    "WRG": "WRG",
-    "WOC": "WOC",
-    "WCE": "WCE",
-    "WHC": "WHC",
-    "WSD": "WSD",
-    "WBC": "WBC",
-    "WWR": "WWR",
-    "WCC": "WCC",
-    "WMC": "WMC",
-    "WWA": "WWA",
-    "WLC": "WLC",
-    "WBZ": "WBZ",
-    "WSL": "WSL",
-    "WDC": "WDC",
+    "WOW RETAIL": "WOW",
 
-    # === PRIVATE / SPECIAL ===
-    "WPR": "WPR",
-    "WAN": "WAN",
+    # --- Retail expansions (canonical in GAMES) ---
+    "DFL": "DFL",
+    "DRAGONFLIGHT": "DFL",
+    "TWW": "TWW",
+    "WARWITHIN": "TWW",
+    "MDN": "MDN",
+    "MIDNIGHT": "MDN",
+    "TLT": "TLT",
+    "TITAN": "TLT",
 
-    # === MAJOR MMORPG TITLES ===
+    # ==============================
+    # ✅ WORLD OF WARCRAFT CLASSIC
+    # ==============================
+    "WOWC": "WOWC",
+    "CLASSIC": "WOWC",
+    "ERA": "ERA",
+    "HC": "HC",
+    "HARDCORE": "HC",
+    "SOD": "SOD",
+
+    # --- Classic expansions ---
+    "TBCC": "TBCC",
+    "TBC": "TBCC",
+    "WOTLKC": "WOTLKC",
+    "CATAC": "CATAC",
+    "MOPC": "MOPC",
+    "WODC": "WODC",
+    "LEGC": "LEGC",
+
+    # Private / Anniversary
+    "PRS": "PRS",
+    "ANV": "ANV",
+
+    # ==============================
+    # ✅ DIABLO SERIES
+    # ==============================
+    "DIABLO": "D1",
+    "D1": "D1",
+    "D2R": "D2R",
+    "D3": "D3",
+    "D4": "D4",
+    "D4VH": "D4VH",
+
+    # ==============================
+    # ✅ PATH OF EXILE
+    # ==============================
     "POE": "POE",
-    "PO2": "PO2",
-    "DIA": "DIA",
-    "DI2": "DI2",
-    "DI3": "DI3",
-    "DI4": "DI4",
-    "AIO": "AIO",
+    "POE2": "POE2",
+    "PO2": "POE2",
+
+    # ==============================
+    # ✅ LOST ARK (Renamed -> LARK)
+    # ==============================
+    "LARK": "LARK",
+    "LOSTARK": "LARK",
+    "LAK": "LARK",
+    "LA": "LARK",
+
+    # ==============================
+    # ✅ MAJOR MMORPG
+    # ==============================
+    "AION": "AION",
+    "AIONC": "AIC",
     "AIC": "AIC",
+
     "ALB": "ALB",
-    "LAR": "LAR",
-    "LEP": "LEP",
-    "NWA": "NWA",
-    "NWT": "NWT",
-    "TAR": "TAR",
-    "TNL": "TNL",
-    "PMO": "PMO",
-    "MO2": "MO2",
-    "WFR": "WFR",
-    "DAD": "DAD",
-    "RBL": "RBL",
-    "MCH": "MCH",
-    "TF2": "TF2",
-    "BLR": "BLR",
+    "AA": "AA",
+    "AAW": "AAW",
+    "BNS": "BNS",
+    "BNS2": "BNS2",
+    "BDO": "BDO",
     "BDM": "BDM",
-    "ESO": "ESO",
-    "FFX": "FFX",
-    "GW2": "GW2",
-    "RAG": "RAG",
-    "RUN": "RUN",
-    "OSR": "OSR",
-    "TIB": "TIB",
+    "CO": "CO",
+    "CORE": "CORE",
+    "DAD": "DAD",
     "EVE": "EVE",
-    "SWT": "SWT",
-    "LOA": "LOA",
-    "L2C": "L2C",
-    "ARC": "ARC",
-    "ARW": "ARW",
-    "BDR": "BDR",
-    "BD2": "BD2",
-    "CON": "CON",
+    "ESO": "ESO",
+    "FFXIV": "FFXIV",
+    "GW2": "GW2",
+    "RO": "RO",
+    "RVD": "RVD",
+    "RS3": "RS3",
+    "OSRS": "OSRS",
+    "RPL": "RPL",
     "SRO": "SRO",
-    "RSO": "RSO",
-    "VRI": "VRI",
-    "MYO": "MYO",
-    "UND": "UND",
-    "ELO": "ELO",
-    "SEA": "SEA",
-    "NEO": "NEO",
-    "GIL": "GIL",
+    "SWTOR": "SWTOR",
+    "TRS": "TRS",
+    "TIB": "TIB",
+    "TL": "TL",
+    "VR": "VR",
+
+    # ==============================
+    # ✅ FPS / SURVIVAL / ACTION
+    # ==============================
+    "ABI": "ABI",
+    "APEX": "APEX",
+    "BS": "BS",
+    "COC": "COC",
+    "CR": "CR",
+    "CS2": "CS2",
+    "DBD": "DBD",
+    "DESTINY": "D2",
+    "D2": "D2",
+    "DT": "DT",
+    "EFT": "EFT",
+    "FIN": "FIN",
+    "F76": "F76",
+    "FH5": "FH5",
+    "GEN": "GEN",
+    "HSR": "HSR",
+    "HD": "HD",
+    "LOL": "LOL",
+    "MS": "MS",
+    "NBA2K": "NBA2K",
+    "OH": "OH",
+    "OW2": "OW2",
+    "PAL": "PAL",
+    "PZ": "PZ",
+    "QF": "QF",
+    "REM2": "REM2",
+    "RUST": "RUST",
+    "SOT": "SOT",
+    "TF2": "TF2",
+    "TFD": "TFD",
+    "VAL": "VAL",
+    "WF": "WF",
+    "WW": "WW",
+    "ZZZ": "ZZZ",
+
+    # ==============================
+    # ✅ SPECIAL / LEGACY MMORPG
+    # ==============================
+    "AQW": "AQW",
+    "ROR": "ROR",
 }
 
-# === Reverse Mapping: ISO → IOC ===
+
+# =====================================================================
+# ✅ Reverse Mapping: ISO → IOC (one direction guaranteed)
+# =====================================================================
 ISO_TO_IOC = {iso: ioc for ioc, iso in IOC_TO_ISO.items()}
 
-# === Historical / Legacy Aliases (Optional) ===
+
+# =====================================================================
+# ✅ Historical Aliases (for old crawlers / legacy imports)
+# =====================================================================
 IOC_HISTORICAL_TO_ISO = {
-    "WOWR": "WRF",  # Dragonflight under older code
-    "WOWC": "WRC",  # Cataclysm-era reference
-    "WOWM": "WRM",  # Mists of Pandaria alias
-    "WOWCL": "WOC",  # WoW Classic shorthand
-    "WOWHC": "WHC",  # Hardcore alias
-    "WOWSD": "WSD",  # Season of Discovery alias
-    "POEX": "POE",   # Path of Exile legacy
-    "POE2": "PO2",   # Path of Exile 2 beta
-    "DIAB": "DIA",   # Diablo alias
-    "DIIV": "DI4",   # Diablo IV alias
-    "AIONC": "AIC",  # Aion Classic alias
-    "NWAL": "NWA",   # New World alias
-    "BDON": "BLR",   # Black Desert alias
-    "FF14": "FFX",   # FFXIV common tag
-    "RS3": "RUN",    # RuneScape 3
-    "OSRS": "OSR",   # Old School RuneScape
-    "GWII": "GW2",   # Guild Wars 2 alias
+    "WOWR": "DFL",        # old Dragonflight ref
+    "WOWCL": "WOWC",      # classic shorthand
+    "WOWHC": "HC",
+    "WOWSD": "SOD",
+    "POEX": "POE",
+    "DIAB": "D1",
+    "DIIV": "D4",
+    "AIONC": "AIC",
+    "FF14": "FFXIV",
+    "RS3": "RS3",
+    "OSRS": "OSRS",
+    "GWII": "GW2",
 }
 
+
+# =====================================================================
+# ✅ Validation: ensures IOC_TO_ISO only uses real GAMES[] codes
+# =====================================================================
 def check_ioc_games(verbosity: int = 1):
     """
-    Verify that all IOC codes correctly map to GAMES in data.py
+    Verify that all IOC codes correctly map to GAMES in django_games.data.GAMES
     """
     from django_games.data import GAMES
 
@@ -127,20 +201,19 @@ def check_ioc_games(verbosity: int = 1):
         print("Checking IOC <-> Game mappings…")
 
     missing = []
-    for key in ISO_TO_IOC:
-        if key not in GAMES:
-            missing.append(key)
+    for iso in ISO_TO_IOC:
+        if iso not in GAMES:
+            missing.append(iso)
 
     if missing:
-        print("⚠️ Missing entries in GAMES for:")
+        print("⚠️ Missing canonical codes in GAMES:")
         for m in missing:
             print(f"  - {m}")
     else:
-        print("✅ All IOC codes map correctly!")
+        print("✅ All IOC mappings match canonical GAMES!")
 
     return missing
 
 
 if __name__ == "__main__":
-    # Run validation manually
     check_ioc_games()

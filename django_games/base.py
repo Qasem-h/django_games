@@ -19,25 +19,31 @@ class GamesBase:
     lookups across Saleor, dashboards, and game metadata integrations.
     """
 
-class GamesBase:
-
+    # ======================================================================
+    # ✅ COMMUNITY-FRIENDLY NAMES → CANONICAL CODE MAP (WOWC + LARK UPDATED)
+    # ======================================================================
     COMMON_NAMES = {
-        # ✅ wow series…  
-        # (unchanged — uses full names, not codes)
-        # ✅ This section stays exactly as provided.
-        # ✅ No need to modify because these are *lookup strings*, not codes.
 
+        # ======================
+        # ✅ WORLD OF WARCRAFT
+        # ======================
         "WOW": _("World of Warcraft"),
         "WOW RETAIL": _("World of Warcraft"),
+        "WORLD OF WARCRAFT": _("World of Warcraft"),
+
+        # --- Classic (renamed to WOWC) ---
         "WOW CLASSIC": _("World of Warcraft Classic"),
         "WOW VANILLA": _("World of Warcraft Classic"),
+        "WOWC": _("World of Warcraft Classic"),
+        "CLASSIC": _("World of Warcraft Classic"),
+
         "WOW ERA": _("World of Warcraft Classic Era"),
         "WOW HARDCORE": _("World of Warcraft Classic Hardcore"),
         "WOW HC": _("World of Warcraft Classic Hardcore"),
         "WOW SOD": _("World of Warcraft: Season of Discovery"),
         "WOW PRIVATE": _("World of Warcraft Private Server"),
 
-        # Retail expansions
+        # --- Retail Expansions ---
         "WOW TBC": _("World of Warcraft: The Burning Crusade"),
         "WOW WOTLK": _("World of Warcraft: Wrath of the Lich King"),
         "WOW CATA": _("World of Warcraft: Cataclysm"),
@@ -46,91 +52,190 @@ class GamesBase:
         "WOW LEGION": _("World of Warcraft: Legion"),
         "WOW BFA": _("World of Warcraft: Battle for Azeroth"),
         "WOW SHADOWLANDS": _("World of Warcraft: Shadowlands"),
+
         "WOW DF": _("World of Warcraft: Dragonflight"),
+        "DRAGONFLIGHT": _("World of Warcraft: Dragonflight"),
+
         "WOW WW": _("World of Warcraft: The War Within"),
+        "WOW WAR WITHIN": _("World of Warcraft: The War Within"),
+
         "WOW MIDNIGHT": _("World of Warcraft: Midnight"),
         "WOW TITAN": _("World of Warcraft: The Last Titan"),
 
-        # ✅ Path of Exile
+        # ======================
+        # ✅ PATH OF EXILE
+        # ======================
         "POE": _("Path of Exile"),
+        "PATH OF EXILE": _("Path of Exile"),
         "POE 2": _("Path of Exile 2"),
+        "POE2": _("Path of Exile 2"),
 
-        # ✅ Diablo
+        # ======================
+        # ✅ DIABLO SERIES
+        # ======================
         "D1": _("Diablo"),
         "DIABLO": _("Diablo"),
-        "D2": _("Diablo II: Resurrected"),
-        "D3": _("Diablo III"),
-        "D4": _("Diablo IV"),
-        "D4X": _("Diablo IV: Vessel of Hatred"),
+        "DIABLO 1": _("Diablo"),
 
-        # ✅ Albion Online
+        "D2": _("Diablo II: Resurrected"),
+        "DIABLO 2": _("Diablo II: Resurrected"),
+        "DIABLO II": _("Diablo II: Resurrected"),
+
+        "D3": _("Diablo III"),
+        "DIABLO 3": _("Diablo III"),
+
+        "D4": _("Diablo IV"),
+        "DIABLO 4": _("Diablo IV"),
+
+        "D4X": _("Diablo IV: Vessel of Hatred"),
+        "D4 EXPANSION": _("Diablo IV: Vessel of Hatred"),
+
+        # ======================
+        # ✅ LOST ARK (RENAMED → LARK)
+        # ======================
+        "LOST ARK": _("Lost Ark"),
+        "LARK": _("Lost Ark"),
+        "LA": _("Lost Ark"),
+        "LAK": _("Lost Ark"),
+
+        # ======================
+        # ✅ ALBION ONLINE
+        # ======================
         "ALB": _("Albion Online"),
         "ALBION": _("Albion Online"),
+        "ALBION ONLINE": _("Albion Online"),
 
-        # ✅ Lost Ark
-        "LOST ARK": _("Lost Ark"),
-        "LA": _("Lost Ark"),
-
-        # ✅ AION
+        # ======================
+        # ✅ AION SERIES
+        # ======================
         "AION": _("Aion"),
         "AION CLASSIC": _("Aion Classic"),
 
-        # ✅ New World
+        # ======================
+        # ✅ NEW WORLD
+        # ======================
         "NEW WORLD": _("New World"),
         "NEW WORLD AETERNUM": _("New World: Aeternum"),
+        "AETERNUM": _("New World: Aeternum"),
 
-        # ✅ Others (exactly as you provided)
+        # ======================
+        # ✅ TARISLAND
+        # ======================
         "TARISLAND": _("Tarisland"),
+
+        # ======================
+        # ✅ THRONE AND LIBERTY
+        # ======================
         "THRONE AND LIBERTY": _("Throne and Liberty"),
         "TNL": _("Throne and Liberty"),
+
+        # ======================
+        # ✅ POKEMMO
+        # ======================
         "POKEMMO": _("PokeMMO"),
+
+        # ======================
+        # ✅ MORTAL ONLINE 2
+        # ======================
         "MORTAL ONLINE 2": _("Mortal Online 2"),
+        "MO2": _("Mortal Online 2"),
+
+        # ======================
+        # ✅ WARFRAME
+        # ======================
         "WARFRAME": _("Warframe"),
+        "WF": _("Warframe"),
+
+        # ======================
+        # ✅ MINECRAFT / HYPIXEL
+        # ======================
         "MINECRAFT": _("Minecraft"),
-        "HYPIXEL": _("Minecraft: Hypixel Skyblock"),
-        "HYPIXEL SKYBLOCK": _("Minecraft: Hypixel Skyblock"),
+        "HYPIXEL": _("Minecraft: Hypixel SkyBlock"),
+        "HYPIXEL SKYBLOCK": _("Minecraft: Hypixel SkyBlock"),
+        "SKYBLOCK": _("Minecraft: Hypixel SkyBlock"),
 
-        "ROBLOX": _("Roblox"),
-        "DARK AND DARKER": _("Dark and Darker"),
-
-        "TF2": _("Team Fortress 2"),
-        "TEAM FORTRESS 2": _("Team Fortress 2"),
-
+        # ======================
+        # ✅ RUNESCAPE SERIES
+        # ======================
         "RUNESCAPE": _("RuneScape 3"),
+        "RUNESCAPE 3": _("RuneScape 3"),
         "RS3": _("RuneScape 3"),
         "RS": _("RuneScape 3"),
-        "OSRS": _("Old School RuneScape"),
 
+        "OSRS": _("Old School RuneScape"),
+        "OLD SCHOOL RUNESCAPE": _("Old School RuneScape"),
+
+        # ======================
+        # ✅ BLACK DESERT SERIES
+        # ======================
         "BLACK DESERT": _("Black Desert Online"),
         "BDO": _("Black Desert Online"),
+
         "BLACK DESERT MOBILE": _("Black Desert Mobile"),
         "BDM": _("Black Desert Mobile"),
 
+        # ======================
+        # ✅ FFXIV
+        # ======================
         "FFXIV": _("Final Fantasy XIV Online"),
+        "FF14": _("Final Fantasy XIV Online"),
+        "FINAL FANTASY XIV": _("Final Fantasy XIV Online"),
 
+        # ======================
+        # ✅ ESO
+        # ======================
         "ESO": _("The Elder Scrolls Online"),
         "TESO": _("The Elder Scrolls Online"),
 
+        # ======================
+        # ✅ GUILD WARS 2
+        # ======================
         "GW2": _("Guild Wars 2"),
         "GW": _("Guild Wars 2"),
 
+        # ======================
+        # ✅ TIBIA
+        # ======================
         "TIBIA": _("Tibia"),
+
+        # ======================
+        # ✅ CONQUER ONLINE
+        # ======================
         "CONQUER ONLINE": _("Conquer Online"),
+
+        # ======================
+        # ✅ SILKROAD
+        # ======================
         "SILKROAD": _("Silkroad Online"),
         "SILKROAD ONLINE": _("Silkroad Online"),
 
+        # ======================
+        # ✅ TARKOV
+        # ======================
         "TARKOV": _("Escape from Tarkov"),
         "EFT": _("Escape from Tarkov"),
 
+        # ======================
+        # ✅ PROJECT ZOMBOID
+        # ======================
         "PZ": _("Project Zomboid"),
 
+        # ======================
+        # ✅ AQW
+        # ======================
         "AQW": _("AdventureQuest Worlds"),
 
+        # ======================
+        # ✅ WARHAMMER ONLINE / ROR
+        # ======================
         "WARHAMMER ONLINE": _("Warhammer Online: Return of Reckoning"),
         "RETURN OF RECKONING": _("Warhammer Online: Return of Reckoning"),
+        "ROR": _("Warhammer Online: Return of Reckoning"),
     }
 
-    # Legacy titles
+    # ======================================================================
+    # ✅ LEGACY TITLES (Historical, Beta, Old Versions)
+    # ======================================================================
     OLD_NAMES = {
         "WOW": [
             _("World of Warcraft Vanilla"),
@@ -142,7 +247,7 @@ class GamesBase:
         ],
         "DI2": [
             _("Diablo II"),
-            _("Diablo II Lord of Destruction"),
+            _("Diablo II: Lord of Destruction"),
         ],
         "ESO": [
             _("The Elder Scrolls Online: Tamriel Unlimited"),
@@ -163,5 +268,6 @@ class GamesBase:
             _("Aion 2.x"),
         ],
     }
+
     def __getstate__(self):
         return None

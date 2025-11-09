@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import itertools
 import re
+from collections.abc import Iterable
 from contextlib import contextmanager
 from gettext import NullTranslations
 from typing import (
     TYPE_CHECKING,
     Any,
     Dict,
-    Iterable,
     List,
     Literal,
     NamedTuple,
