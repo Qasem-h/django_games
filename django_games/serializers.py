@@ -1,14 +1,10 @@
-from typing import Any, Dict
-
-from rest_framework import serializers
-
 from . import fields, serializer_fields
+from rest_framework import serializers
 
 
 class GameFieldMixin:
     def build_standard_field(self, field_name, model_field):
-        field_kwargs: Dict[str, Any]
-        field_class, field_kwargs = super().build_standard_field(  # type: ignore
+        field_class, field_kwargs = super().build_standard_field(
             field_name, model_field
         )
         if (

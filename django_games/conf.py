@@ -1,11 +1,10 @@
 from typing import Any, Dict, List
-
 import django.conf
 
 
 class AppSettings:
-
-    def __getattribute__(self, attr: str):
+ 
+    def __getattribute__(self, attr):
         if attr == attr.upper():
             try:
                 return getattr(django.conf.settings, attr)
@@ -15,6 +14,7 @@ class AppSettings:
 
 
 class Settings(AppSettings):
+
     GAMES_COMMON_NAMES = True
     GAMES_OVERRIDE: Dict[str, Any] = {}
     GAMES_ONLY: Dict[str, Any] = {}
