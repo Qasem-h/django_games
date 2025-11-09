@@ -1,5 +1,7 @@
-from rest_framework import serializers
+from typing import Any
+
 from django.utils.encoding import force_str
+from rest_framework import serializers
 
 from django_games import games
 
@@ -9,8 +11,12 @@ class GameField(serializers.ChoiceField):
         self.game_dict = kwargs.pop("game_dict", None)
         self.name_only = kwargs.pop("name_only", None)
         field_games = kwargs.pop("games", None)
-        self.games = field_games if field_games else games
-        super().__init__(self.games, *args, **kwargs)
+        self.games = field_games or games
+        super().__init__(
+            self.games,  # type: ignore
+            *args,
+            **kwargs,
+        )
 
     def to_representation(self, obj):
         code = self.games.alpha2(obj)
@@ -22,7 +28,7 @@ class GameField(serializers.ChoiceField):
             return code
         return {"code": code, "name": force_str(self.games.name(obj))}
 
-    def to_internal_value(self, data):
+    def to_internal_value(self, data: Any):
         if not self.allow_blank and data == "":
             self.fail("invalid_choice", input=data)
 

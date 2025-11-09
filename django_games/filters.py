@@ -1,3 +1,4 @@
+import django
 from django.contrib import admin
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
@@ -5,22 +6,27 @@ from django.utils.translation import gettext_lazy as _
 
 class GameFilter(admin.FieldListFilter):
 
-
-    title = _("Game")
+    title = _("Game")  # type: ignore
 
     def expected_parameters(self):
         return [self.field.name]
 
     def choices(self, changelist):
         value = self.used_parameters.get(self.field.name)
+        # In Django 5.x, query parameters may come as lists
+        if isinstance(value, list) and len(value) == 1:
+            value = value[0]
         yield {
             "selected": value is None,
             "query_string": changelist.get_query_string({}, [self.field.name]),
             "display": _("All"),
         }
         for lookup, title in self.lookup_choices(changelist):
+            selected = force_str(lookup) == value
+            if django.VERSION >= (5, 0):
+                selected = value is not None and selected
             yield {
-                "selected": value == force_str(lookup),
+                "selected": selected,
                 "query_string": changelist.get_query_string(
                     {self.field.name: lookup}, []
                 ),

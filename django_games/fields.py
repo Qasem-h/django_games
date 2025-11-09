@@ -1,8 +1,8 @@
 import re
-from typing import Any, Iterable, Tuple, Type, Union, cast
-from urllib import parse as urlparse
+import sys
+from typing import Any, Iterable, Optional, Tuple, Type, Union, cast
 
-import pkg_resources
+import django
 from django import forms
 from django.contrib.admin.filters import FieldListFilter
 from django.core import checks, exceptions
@@ -10,10 +10,28 @@ from django.db.models import lookups
 from django.db.models.fields import BLANK_CHOICE_DASH, CharField
 from django.utils.encoding import force_str
 from django.utils.functional import lazy
-from django.utils.html import escape as escape_html
 
 from django_games import Games, games, filters, widgets
 from django_games.conf import settings
+
+_entry_points: Iterable[Any]
+try:
+    import importlib.metadata
+
+    if sys.version_info >= (3, 10):
+        _entry_points = importlib.metadata.entry_points(
+            group="django_games.Game"
+        )
+    else:
+        _entry_points = importlib.metadata.entry_points().get(
+            "django_games.Game", []
+        )
+except ImportError:  # Python <3.8
+    import pkg_resources
+
+    _entry_points = pkg_resources.iter_entry_points("django_games.Game")
+
+EXTENSIONS = {ep.name: ep.load() for ep in _entry_points}  # type: ignore
 
 
 class TemporaryEscape:
@@ -34,12 +52,22 @@ class TemporaryEscape:
 
 
 class Game:
-    def __init__(self, code,  str_attr="code", custom_games=None):
+    """
+    Represents a game entry (formerly had icon properties — removed).
+    """
+
+    def __init__(
+        self,
+        code: str,
+        str_attr: str = "code",
+        custom_games: Optional[Games] = None,
+    ):
         self._escape = False
         self._str_attr = str_attr
         if custom_games is games:
             custom_games = None
         self.custom_games = custom_games
+        # Convert to normalized code if exists in registry
         self.code = self.games.alpha2(code) or code
 
     def __str__(self):
@@ -58,8 +86,7 @@ class Game:
         args = [f"code={self.code!r}"]
         if self._str_attr != "code":
             args.append(f"str_attr={self._str_attr!r}")
-        args = ", ".join(args)
-        return f"{self.__class__.__name__}({args})"
+        return f"{self.__class__.__name__}({', '.join(args)})"
 
     def __bool__(self):
         return bool(self.code)
@@ -75,22 +102,53 @@ class Game:
     def escape(self):
         return TemporaryEscape(self)
 
-    def maybe_escape(self, text):
-        if not self.escape:
-            return text
-        return escape_html(text)
+    def maybe_escape(self, text) -> str:
+        return text  # Escape removed (icons removed)
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.maybe_escape(self.games.name(self.code))
 
     @property
-    def alpha3(self):
+    def alpha3(self) -> str:
         return self.games.alpha3(self.code)
 
+    @property
+    def numeric(self) -> Optional[int]:
+        return self.games.numeric(self.code)
+
+    @property
+    def numeric_padded(self) -> Optional[str]:
+        return self.games.numeric(self.code, padded=True)
+
+    # ------------------------------------------------------------
+    # ✅ ICON PROPERTIES REMOVED CLEANLY (icon, icon_css, unicode_icon)
+    # ------------------------------------------------------------
+
+    # @property
+    # def icon(self):  REMOVED
+    # @property
+    # def icon_css(self): REMOVED
+    # @property
+    # def unicode_icon(self): REMOVED
+
+    # @staticmethod
+    # def game_from_ioc(...): REMOVED (icon-specific)
+
+    @property
+    def ioc_code(self):
+        return self.games.ioc_code(self.code)
+
+    def __getattr__(self, attr):
+        if attr in EXTENSIONS:
+            return EXTENSIONS[attr](self)
+        raise AttributeError()
 
 
 class GameDescriptor:
+    """
+    Descriptor for GameField. (icon removed)
+    """
 
     def __init__(self, field):
         self.field = field
@@ -98,7 +156,7 @@ class GameDescriptor:
     def __get__(self, instance=None, owner=None):
         if instance is None:
             return self
-        # Check in case this field was deferred.
+        # Handle deferred fields
         if self.field.name not in instance.__dict__:
             instance.refresh_from_db(fields=[self.field.name])
         value = instance.__dict__[self.field.name]
@@ -119,10 +177,11 @@ class GameDescriptor:
 
 
 class LazyChoicesMixin(widgets.LazyChoicesMixin):
-    def _set_choices(self, value):
-  
-        super()._set_choices(value)
-        self.widget.choices = value
+    if django.VERSION < (5, 0):
+
+        def _set_choices(self, value):
+            super()._set_choices(value)
+            self.widget.choices = value
 
 
 _Choice = Tuple[Any, str]
@@ -131,29 +190,42 @@ _FieldChoices = Iterable[Union[_Choice, _ChoiceNamedGroup]]
 
 
 class LazyTypedChoiceField(LazyChoicesMixin, forms.TypedChoiceField):
- 
     choices: Any
     widget = widgets.LazySelect
 
 
-class LazyTypedMultipleChoiceField(LazyChoicesMixin, forms.TypedMultipleChoiceField):
-
+class LazyTypedMultipleChoiceField(
+    LazyChoicesMixin, forms.TypedMultipleChoiceField
+):
     choices: Any
     widget = widgets.LazySelectMultiple
 
 
 class GameField(CharField):
-
+    """
+    Main model field for games.
+    Icon-related arguments removed.
+    """
 
     descriptor_class = GameDescriptor
+    games: Games
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         games_class: Type[Games] = kwargs.pop("games", None)
         self.games = games_class() if games_class else games
         self.games_str_attr = kwargs.pop("games_str_attr", "code")
         self.blank_label = kwargs.pop("blank_label", None)
         self.multiple = kwargs.pop("multiple", None)
-        kwargs["choices"] = self.games
+        self.multiple_unique = kwargs.pop("multiple_unique", True)
+        self.multiple_sort = kwargs.pop("multiple_sort", True)
+
+        # dynamic choices
+        if django.VERSION >= (5, 0):
+            kwargs["choices"] = lambda: self.games
+        else:
+            kwargs["choices"] = self.games
+
+        # Automatic max_length = longest game code
         if "max_length" not in kwargs:
             if self.multiple:
                 kwargs["max_length"] = (
@@ -162,9 +234,8 @@ class GameField(CharField):
                     + sum(len(code) for code in self.games.games)
                 )
             else:
-                kwargs["max_length"] = max(
-                    len(code) for code in self.games.games
-                )
+                kwargs["max_length"] = max(len(code) for code in self.games.games)
+
         super().__init__(*args, **kwargs)
 
     def check(self, **kwargs):
@@ -175,12 +246,10 @@ class GameField(CharField):
     def _check_multiple(self):
         if not self.multiple or not self.null:
             return []
-
         hint = "Remove null=True argument on the field"
         if not self.blank:
-            hint += " (just add blank=True if you want to allow no selection)"
+            hint += " (add blank=True if you want empty value allowed)"
         hint += "."
-
         return [
             checks.Error(
                 "Field specifies multiple=True, so should not be null.",
@@ -198,18 +267,13 @@ class GameField(CharField):
         setattr(cls, self.name, self.descriptor_class(self))
 
     def pre_save(self, *args, **kwargs):
-        "Returns field's value just before saving."
         value = super(CharField, self).pre_save(*args, **kwargs)
         return self.get_prep_value(value)
 
     def get_prep_value(self, value):
-        "Returns field's value prepared for saving into a database."
         value = self.get_clean_value(value)
         if self.multiple:
-            if value:
-                value = ",".join(value)
-            else:
-                value = ""
+            value = ",".join(value) if value else ""
         return super(CharField, self).get_prep_value(value)
 
     def game_to_text(self, value):
@@ -234,32 +298,74 @@ class GameField(CharField):
                 iter(value)
             except TypeError:
                 value = [value]
-        return list(filter(None, [self.game_to_text(c) for c in value]))
+
+        cleaned_value = []
+        seen = set()
+        for c in value:
+            c = self.game_to_text(c)
+            if not c:
+                continue
+            if self.multiple_unique and c in seen:
+                continue
+            seen.add(c)
+            cleaned_value.append(c)
+
+        if self.multiple_sort:
+            cleaned_value = sorted(cleaned_value)
+        return cleaned_value
 
     def deconstruct(self):
-
         name, path, args, kwargs = super(CharField, self).deconstruct()
         kwargs.pop("choices", None)
-        if self.multiple:  # multiple determines the length of the field
+        if self.multiple:
             kwargs["multiple"] = self.multiple
+        if not self.multiple_unique:
+            kwargs["multiple_unique"] = False
+        if not self.multiple_sort:
+            kwargs["multiple_sort"] = False
         if self.games is not games:
-
             kwargs["games"] = self.games.__class__
         return name, path, args, kwargs
 
-    def get_choices(self, include_blank=True, blank_choice=None, *args, **kwargs):
-        if blank_choice is None:
+    if django.VERSION >= (5, 0):
+
+        def get_choices(
+            self,
+            include_blank=True,
+            blank_choice=BLANK_CHOICE_DASH,
+            limit_choices_to=None,
+            ordering=(),
+        ):
+            if self.multiple:
+                include_blank = False
             if self.blank_label is None:
                 blank_choice = BLANK_CHOICE_DASH
             else:
                 blank_choice = [("", self.blank_label)]
-        if self.multiple:
-            include_blank = False
-        return super().get_choices(
-            include_blank=include_blank, blank_choice=blank_choice, *args, **kwargs
-        )
+            return super().get_choices(
+                include_blank=include_blank,
+                blank_choice=blank_choice,
+                limit_choices_to=limit_choices_to,
+                ordering=ordering,
+            )
 
-    get_choices = lazy(get_choices, list)
+    else:
+
+        def get_choices(
+            self, include_blank=True, blank_choice=None, *args, **kwargs
+        ):
+            if blank_choice is None:
+                if self.blank_label is None:
+                    blank_choice = BLANK_CHOICE_DASH
+                else:
+                    blank_choice = [("", self.blank_label)]
+            if self.multiple:
+                include_blank = False
+            return super().get_choices(
+                include_blank=include_blank, blank_choice=blank_choice, *args, **kwargs
+            )
+
+        get_choices = lazy(get_choices, list)
 
     def formfield(self, **kwargs):
         kwargs.setdefault(
@@ -268,8 +374,7 @@ class GameField(CharField):
         )
         if "coerce" not in kwargs:
             kwargs["coerce"] = super().to_python
-        field = super().formfield(**kwargs)
-        return field
+        return super().formfield(**kwargs)
 
     def to_python(self, value):
         if not self.multiple:
@@ -284,14 +389,10 @@ class GameField(CharField):
         return output
 
     def validate(self, value, model_instance):
-        """
-        Use custom validation for when using a multiple games field.
-        """
         if not self.multiple:
             return super().validate(value, model_instance)
 
         if not self.editable:
-            # Skip validation for non-editable fields.
             return
 
         if value:
@@ -308,24 +409,25 @@ class GameField(CharField):
             raise exceptions.ValidationError(self.error_messages["blank"], code="blank")
 
     def value_to_string(self, obj):
-        """
-        Ensure data is serialized correctly.
-        """
         value = self.value_from_object(obj)
         return self.get_prep_value(value)
 
     def get_lookup(self, lookup_name):
-        if not self.multiple and lookup_name in (
-            "contains",
-            "icontains",
-            "startswith",
-            "istartswith",
-            "endswith",
-            "iendswith",
-            "regex",
-            "iregex",
-            "name",
-            "iname",
+        if (
+            not self.multiple
+            and lookup_name
+            in (
+                "contains",
+                "icontains",
+                "startswith",
+                "istartswith",
+                "endswith",
+                "iendswith",
+                "regex",
+                "iregex",
+                "name",
+                "iname",
+            )
         ):
             lookup_name = f"game_{lookup_name}"
         return super().get_lookup(lookup_name)
@@ -342,7 +444,7 @@ class ExactNameLookup(lookups.Exact):
         )
 
     def get_rhs_op(self, connection, rhs):
-        return connection.operators['exact'] % rhs
+        return connection.operators["exact"] % rhs
 
 
 @GameField.register_lookup
@@ -361,9 +463,14 @@ class FullNameLookup(lookups.In):
             value = self.expr.format(
                 text=re.escape(self.rhs) if self.escape_regex else self.rhs
             )
-            return cast(GameField, self.lhs.output_field).games.by_name(
+            options = cast(GameField, self.lhs.output_field).games.by_name(
                 value, regex=True, insensitive=self.insensitive
             )
+            if len(self.rhs) == 2 and (
+                self.rhs == self.rhs.upper() or self.insensitive
+            ):
+                options.add(self.rhs.upper())
+            return options
         return super().get_prep_lookup()
 
 

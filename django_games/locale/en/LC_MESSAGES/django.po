@@ -1,0 +1,420 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-04 16:53-0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# ============================
+# ✅ Existing Game Entries…
+# (Your entire game list stays untouched)
+# ============================
+
+#: games.py
+msgid "World of Warcraft"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft: Dragonflight"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft: The War Within"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft: Midnight"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft: The Last Titan"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft Classic"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft Classic Era"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft Classic Hardcore"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft: Season of Discovery"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft: The Burning Crusade Classic"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft: Wrath of the Lich King Classic"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft: Cataclysm Classic"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft: Mists of Pandaria Classic"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft: Warlords of Draenor Classic"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft: Legion Classic"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft Private Server"
+msgstr ""
+
+#: games.py
+msgid "World of Warcraft Anniversary"
+msgstr ""
+
+#: games.py
+msgid "Diablo"
+msgstr ""
+
+#: games.py
+msgid "Diablo II: Resurrected"
+msgstr ""
+
+#: games.py
+msgid "Diablo III"
+msgstr ""
+
+#: games.py
+msgid "Diablo IV"
+msgstr ""
+
+#: games.py
+msgid "Diablo IV: Vessel of Hatred"
+msgstr ""
+
+#: games.py
+msgid "Aion"
+msgstr ""
+
+#: games.py
+msgid "Aion Classic"
+msgstr ""
+
+#: games.py
+msgid "Albion Online"
+msgstr ""
+
+#: games.py
+msgid "ArcheAge"
+msgstr ""
+
+#: games.py
+msgid "ArcheAge War"
+msgstr ""
+
+#: games.py
+msgid "Blade & Soul"
+msgstr ""
+
+#: games.py
+msgid "Blade & Soul 2"
+msgstr ""
+
+#: games.py
+msgid "Black Desert Online"
+msgstr ""
+
+#: games.py
+msgid "Black Desert Mobile"
+msgstr ""
+
+#: games.py
+msgid "Conquer Online"
+msgstr ""
+
+#: games.py
+msgid "Corepunk"
+msgstr ""
+
+#: games.py
+msgid "Dark and Darker"
+msgstr ""
+
+#: games.py
+msgid "EVE Online"
+msgstr ""
+
+#: games.py
+msgid "The Elder Scrolls Online"
+msgstr ""
+
+#: games.py
+msgid "Final Fantasy XIV"
+msgstr ""
+
+#: games.py
+msgid "Granado Espada"
+msgstr ""
+
+#: games.py
+msgid "Guild Wars 2"
+msgstr ""
+
+#: games.py
+msgid "Lost Ark"
+msgstr ""
+
+#: games.py
+msgid "Last Epoch"
+msgstr ""
+
+#: games.py
+msgid "Lineage II"
+msgstr ""
+
+#: games.py
+msgid "Lineage II Classic"
+msgstr ""
+
+#: games.py
+msgid "Minecraft Hypixel SkyBlock"
+msgstr ""
+
+#: games.py
+msgid "Monster Hunter Wilds"
+msgstr ""
+
+#: games.py
+msgid "Mortal Online 2"
+msgstr ""
+
+#: games.py
+msgid "Myth of Empires"
+msgstr ""
+
+#: games.py
+msgid "Neo Steam"
+msgstr ""
+
+#: games.py
+msgid "New World"
+msgstr ""
+
+#: games.py
+msgid "New World: Aeternum"
+msgstr ""
+
+#: games.py
+msgid "PokeMMO"
+msgstr ""
+
+#: games.py
+msgid "Path of Exile"
+msgstr ""
+
+#: games.py
+msgid "Path of Exile 2"
+msgstr ""
+
+#: games.py
+msgid "Ragnarok Online"
+msgstr ""
+
+#: games.py
+msgid "Ravendawn"
+msgstr ""
+
+#: games.py
+msgid "RuneScape 3"
+msgstr ""
+
+#: games.py
+msgid "Old School RuneScape"
+msgstr ""
+
+#: games.py
+msgid "Rappelz Online"
+msgstr ""
+
+#: games.py
+msgid "Silkroad Online"
+msgstr ""
+
+#: games.py
+msgid "Star Wars: The Old Republic"
+msgstr ""
+
+#: games.py
+msgid "Tarisland"
+msgstr ""
+
+#: games.py
+msgid "Tibia"
+msgstr ""
+
+#: games.py
+msgid "Throne and Liberty"
+msgstr ""
+
+#: games.py
+msgid "V Rising"
+msgstr ""
+
+#: games.py
+msgid "Arena Breakout Infinite"
+msgstr ""
+
+#: games.py
+msgid "Apex Legends"
+msgstr ""
+
+#: games.py
+msgid "Brawl Stars"
+msgstr ""
+
+#: games.py
+msgid "Clash of Clans"
+msgstr ""
+
+#: games.py
+msgid "Clash Royale"
+msgstr ""
+
+#: games.py
+msgid "Counter-Strike 2"
+msgstr ""
+
+#: games.py
+msgid "Dead by Daylight"
+msgstr ""
+
+#: games.py
+msgid "Destiny 2"
+msgstr ""
+
+#: games.py
+msgid "Darktide"
+msgstr ""
+
+#: games.py
+msgid "Escape from Tarkov"
+msgstr ""
+
+#: games.py
+msgid "The Finals"
+msgstr ""
+
+#: games.py
+msgid "Fallout 76"
+msgstr ""
+
+#: games.py
+msgid "Forza Horizon 5"
+msgstr ""
+
+#: games.py
+msgid "Genshin Impact"
+msgstr ""
+
+#: games.py
+msgid "Honkai: Star Rail"
+msgstr ""
+
+#: games.py
+msgid "Hay Day"
+msgstr ""
+
+#: games.py
+msgid "League of Legends"
+msgstr ""
+
+#: games.py
+msgid "MapleStory"
+msgstr ""
+
+#: games.py
+msgid "NBA 2K"
+msgstr ""
+
+#: games.py
+msgid "Once Human"
+msgstr ""
+
+#: games.py
+msgid "Overwatch 2"
+msgstr ""
+
+#: games.py
+msgid "Palworld"
+msgstr ""
+
+#: games.py
+msgid "Project Zomboid"
+msgstr ""
+
+#: games.py
+msgid "The Quinfall"
+msgstr ""
+
+#: games.py
+msgid "Remnant II"
+msgstr ""
+
+#: games.py
+msgid "Rust"
+msgstr ""
+
+#: games.py
+msgid "Sea of Thieves"
+msgstr ""
+
+#: games.py
+msgid "Team Fortress 2"
+msgstr ""
+
+#: games.py
+msgid "The First Descendant"
+msgstr ""
+
+#: games.py
+msgid "VALORANT"
+msgstr ""
+
+#: games.py
+msgid "Warframe"
+msgstr ""
+
+#: games.py
+msgid "Wuthering Waves"
+msgstr ""
+
+#: games.py
+msgid "Zenless Zone Zero"
+msgstr ""
+
+#: games.py
+msgid "AdventureQuest Worlds"
+msgstr ""
+
+#: games.py
+msgid "Warhammer Online: Return of Reckoning"
+msgstr ""
