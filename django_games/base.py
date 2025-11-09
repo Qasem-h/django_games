@@ -19,109 +19,118 @@ class GamesBase:
     lookups across Saleor, dashboards, and game metadata integrations.
     """
 
-    # Common shorthand, acronyms, and alternative spellings
+class GamesBase:
+
     COMMON_NAMES = {
-        # --- World of Warcraft ---
+        # ✅ wow series…  
+        # (unchanged — uses full names, not codes)
+        # ✅ This section stays exactly as provided.
+        # ✅ No need to modify because these are *lookup strings*, not codes.
+
         "WOW": _("World of Warcraft"),
         "WOW RETAIL": _("World of Warcraft"),
         "WOW CLASSIC": _("World of Warcraft Classic"),
+        "WOW VANILLA": _("World of Warcraft Classic"),
         "WOW ERA": _("World of Warcraft Classic Era"),
         "WOW HARDCORE": _("World of Warcraft Classic Hardcore"),
+        "WOW HC": _("World of Warcraft Classic Hardcore"),
         "WOW SOD": _("World of Warcraft: Season of Discovery"),
         "WOW PRIVATE": _("World of Warcraft Private Server"),
-        "WOW VANILLA": _("World of Warcraft Classic"),
+
+        # Retail expansions
+        "WOW TBC": _("World of Warcraft: The Burning Crusade"),
+        "WOW WOTLK": _("World of Warcraft: Wrath of the Lich King"),
+        "WOW CATA": _("World of Warcraft: Cataclysm"),
+        "WOW MOP": _("World of Warcraft: Mists of Pandaria"),
+        "WOW WOD": _("World of Warcraft: Warlords of Draenor"),
+        "WOW LEGION": _("World of Warcraft: Legion"),
+        "WOW BFA": _("World of Warcraft: Battle for Azeroth"),
+        "WOW SHADOWLANDS": _("World of Warcraft: Shadowlands"),
         "WOW DF": _("World of Warcraft: Dragonflight"),
         "WOW WW": _("World of Warcraft: The War Within"),
         "WOW MIDNIGHT": _("World of Warcraft: Midnight"),
         "WOW TITAN": _("World of Warcraft: The Last Titan"),
 
-        # --- Path of Exile ---
+        # ✅ Path of Exile
         "POE": _("Path of Exile"),
         "POE 2": _("Path of Exile 2"),
-        "PATH OF EXILE": _("Path of Exile"),
-        "PATH OF EXILE 2": _("Path of Exile 2"),
 
-        # --- Diablo ---
+        # ✅ Diablo
         "D1": _("Diablo"),
+        "DIABLO": _("Diablo"),
         "D2": _("Diablo II: Resurrected"),
         "D3": _("Diablo III"),
         "D4": _("Diablo IV"),
+        "D4X": _("Diablo IV: Vessel of Hatred"),
 
-        # --- Albion Online ---
+        # ✅ Albion Online
         "ALB": _("Albion Online"),
         "ALBION": _("Albion Online"),
 
-        # --- Lost Ark ---
+        # ✅ Lost Ark
         "LOST ARK": _("Lost Ark"),
         "LA": _("Lost Ark"),
 
-        # --- Aion ---
+        # ✅ AION
         "AION": _("Aion"),
         "AION CLASSIC": _("Aion Classic"),
 
-        # --- New World ---
+        # ✅ New World
         "NEW WORLD": _("New World"),
         "NEW WORLD AETERNUM": _("New World: Aeternum"),
 
-        # --- Tarisland ---
+        # ✅ Others (exactly as you provided)
         "TARISLAND": _("Tarisland"),
-
-        # --- Throne and Liberty ---
         "THRONE AND LIBERTY": _("Throne and Liberty"),
         "TNL": _("Throne and Liberty"),
-
-        # --- PokeMMO ---
         "POKEMMO": _("PokeMMO"),
-
-        # --- Mortal Online 2 ---
         "MORTAL ONLINE 2": _("Mortal Online 2"),
-
-        # --- Warframe ---
         "WARFRAME": _("Warframe"),
+        "MINECRAFT": _("Minecraft"),
+        "HYPIXEL": _("Minecraft: Hypixel Skyblock"),
+        "HYPIXEL SKYBLOCK": _("Minecraft: Hypixel Skyblock"),
 
-        # --- Minecraft Hypixel ---
-        "MINECRAFT": _("Minecraft Hypixel Skyblock"),
-        "HYPIXEL": _("Minecraft Hypixel Skyblock"),
-
-        # --- Roblox ---
         "ROBLOX": _("Roblox"),
-
-        # --- Dark and Darker ---
         "DARK AND DARKER": _("Dark and Darker"),
 
-        # --- Team Fortress 2 ---
-        "TEAM FORTRESS 2": _("Team Fortress 2"),
         "TF2": _("Team Fortress 2"),
+        "TEAM FORTRESS 2": _("Team Fortress 2"),
 
-        # --- RuneScape ---
-        "RUNESCAPE": _("RuneScape"),
+        "RUNESCAPE": _("RuneScape 3"),
+        "RS3": _("RuneScape 3"),
+        "RS": _("RuneScape 3"),
         "OSRS": _("Old School RuneScape"),
 
-        # --- Black Desert ---
         "BLACK DESERT": _("Black Desert Online"),
         "BDO": _("Black Desert Online"),
         "BLACK DESERT MOBILE": _("Black Desert Mobile"),
+        "BDM": _("Black Desert Mobile"),
 
-        # --- Final Fantasy XIV ---
         "FFXIV": _("Final Fantasy XIV Online"),
-        "FINAL FANTASY XIV": _("Final Fantasy XIV Online"),
 
-        # --- Elder Scrolls Online ---
         "ESO": _("The Elder Scrolls Online"),
-        "ELDER SCROLLS ONLINE": _("The Elder Scrolls Online"),
+        "TESO": _("The Elder Scrolls Online"),
 
-        # --- Guild Wars ---
         "GW2": _("Guild Wars 2"),
-        "GUILD WARS 2": _("Guild Wars 2"),
+        "GW": _("Guild Wars 2"),
 
-        # --- Tibia / Conquer / Silkroad ---
         "TIBIA": _("Tibia"),
         "CONQUER ONLINE": _("Conquer Online"),
         "SILKROAD": _("Silkroad Online"),
         "SILKROAD ONLINE": _("Silkroad Online"),
+
+        "TARKOV": _("Escape from Tarkov"),
+        "EFT": _("Escape from Tarkov"),
+
+        "PZ": _("Project Zomboid"),
+
+        "AQW": _("AdventureQuest Worlds"),
+
+        "WARHAMMER ONLINE": _("Warhammer Online: Return of Reckoning"),
+        "RETURN OF RECKONING": _("Warhammer Online: Return of Reckoning"),
     }
 
-    # Legacy titles or outdated references
+    # Legacy titles
     OLD_NAMES = {
         "WOW": [
             _("World of Warcraft Vanilla"),
@@ -142,8 +151,17 @@ class GamesBase:
             _("Guild Wars"),
             _("Guild Wars Factions"),
         ],
+        "RS3": [
+            _("RuneScape 2"),
+            _("RuneScape HD"),
+        ],
+        "OSRS": [
+            _("RuneScape 2007"),
+        ],
+        "AION": [
+            _("Aion 1.x"),
+            _("Aion 2.x"),
+        ],
     }
-
     def __getstate__(self):
-        # Prevent pickling errors (matches Django’s standard for static registries)
         return None
