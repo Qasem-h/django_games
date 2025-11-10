@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "django-games"
-version = "0.3.6"
+version = "0.3.7"
 description = "Provides Game, Region, Server, and Faction fields for Django models — designed for MMORPGs, boosting, and gold marketplaces."
 readme = "README.md"
 authors = [{ name = "Qasem Hajizadeh", email = "gasemhacker@gmail.com" }]
