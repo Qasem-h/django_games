@@ -121,20 +121,6 @@ class Game:
     def numeric_padded(self) -> Optional[str]:
         return self.games.numeric(self.code, padded=True)
 
-    # ------------------------------------------------------------
-    # ✅ ICON PROPERTIES REMOVED CLEANLY (icon, icon_css, unicode_icon)
-    # ------------------------------------------------------------
-
-    # @property
-    # def icon(self):  REMOVED
-    # @property
-    # def icon_css(self): REMOVED
-    # @property
-    # def unicode_icon(self): REMOVED
-
-    # @staticmethod
-    # def game_from_ioc(...): REMOVED (icon-specific)
-
     @property
     def ioc_code(self):
         return self.games.ioc_code(self.code)
