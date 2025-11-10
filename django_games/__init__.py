@@ -581,15 +581,27 @@ class Games(GamesBase):
 
     def __getitem__(self, index):
         """
-        Some applications expect to be able to access members of the field
-        choices by index.
+        Support:
+        - games[0]  → first game (existing behavior)
+        - games["WOW"] → return WOW pair
         """
-        try:
-            return next(itertools.islice(self.__iter__(), index, index + 1))
-        except TypeError:
-            return list(
-                itertools.islice(self.__iter__(), index.start, index.stop, index.step)
-            )
+        # ✅ Case 1: numeric index (old behavior)
+        if isinstance(index, int):
+            try:
+                return next(itertools.islice(self.__iter__(), index, index + 1))
+            except TypeError:
+                return list(itertools.islice(self.__iter__(), index.start, index.stop, index.step))
+
+        # ✅ Case 2: string index → game code
+        if isinstance(index, str):
+            # Return the code/name tuple (code, game_name)
+            name = self.name(index)
+            if name:
+                return GameTuple(index, name)
+            raise KeyError(f"Game code '{index}' does not exist")
+
+        # ✅ Unsupported types
+        raise TypeError(f"Invalid index type: {type(index)}")
 
 
 games = Games()
