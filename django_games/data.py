@@ -44,6 +44,7 @@ GAMES: "Dict[str, StrPromise]" = {
     # === PRIVATE / SPECIAL ===
     "WOWP": _("World of Warcraft Private Server"),
     "ANV": _("World of Warcraft Classic Anniversary Edition"),
+    "TBCCA": _("World of Warcraft: The Burning Crusade Classic Anniversary"),
 
     # === DIABLO SERIES ===
     "D2R": _("Diablo II: Resurrected"),
@@ -116,7 +117,8 @@ ALT_CODES = {
     "CATAC": ("CATAC", 212),
     "MOPC": ("MOPC", 213),
     "WODC": ("WODC", 214),
-    "LEGC": ("LEGC", 215),
+    "TBCCA": ("TBCCA", 215),
+    "LEGC": ("LEGC", 216),
 
     # === Private ===
     "WOWP": ("WOWP", 240),

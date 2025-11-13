@@ -46,6 +46,8 @@ class GamesBase:
         # === PRIVATE / SPECIAL ===
         "WOWP": _("World of Warcraft Private Server"),
         "ANV": _("World of Warcraft Classic Anniversary Edition"),
+        "TBCCA": _("World of Warcraft: The Burning Crusade Classic Anniversary"),
+
 
         # === DIABLO SERIES ===
         "D2R": _("Diablo II: Resurrected"),
