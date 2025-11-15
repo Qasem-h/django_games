@@ -13,12 +13,11 @@ except ImportError:  # pragma: no cover
 class GamesBase:
     """
     Base data for django_games.
-    Canonical-friendly names must use ONLY canonical codes.
-    CLEANED for real RMT + boosting markets (2025 edition)
+    CLEAN 2025 EDITION — Only REAL RMT + Boosting markets included.
     """
 
     # ======================================================================
-    # ✅ CLEANED — CANONICAL → FRIENDLY NAMES (ACTIVE RMT + BOOSTING GAMES)
+    # ✅ CANONICAL → FRIENDLY NAMES (HIGH + MEDIUM RMT MARKETS ONLY)
     # ======================================================================
     COMMON_NAMES = {
 
@@ -29,7 +28,7 @@ class GamesBase:
         "MDN": _("World of Warcraft: Midnight"),
         "TLT": _("World of Warcraft: The Last Titan"),
 
-        # === WORLD OF WARCRAFT CLASSIC ===
+        # === WOW CLASSIC ===
         "WOWC": _("World of Warcraft Classic"),
         "ERA": _("World of Warcraft Classic Era"),
         "HC": _("World of Warcraft Classic Hardcore"),
@@ -40,18 +39,13 @@ class GamesBase:
         "WOTLKC": _("World of Warcraft: Wrath of the Lich King Classic"),
         "CATAC": _("World of Warcraft: Cataclysm Classic"),
         "MOPC": _("World of Warcraft: Mists of Pandaria Classic"),
-        "WODC": _("World of Warcraft: Warlords of Draenor Classic"),
-        "LEGC": _("World of Warcraft: Legion Classic"),
+        "TBCCA": _("World of Warcraft: The Burning Crusade Classic Anniversary"),
 
         # === PRIVATE / SPECIAL ===
         "WOWP": _("World of Warcraft Private Server"),
         "ANV": _("World of Warcraft Classic Anniversary Edition"),
-        "TBCCA": _("World of Warcraft: The Burning Crusade Classic Anniversary"),
 
-
-        # === DIABLO SERIES ===
-        "D2R": _("Diablo II: Resurrected"),
-        "D3": _("Diablo III"),
+        # === DIABLO (Only Active RMT Markets) ===
         "D4": _("Diablo IV"),
         "D4VH": _("Diablo IV: Vessel of Hatred"),
 
@@ -59,44 +53,27 @@ class GamesBase:
         "AION": _("Aion"),
         "AIC": _("Aion Classic"),
         "ALB": _("Albion Online"),
-        "BNS": _("Blade & Soul"),
-        "BDO": _("Black Desert Online"),
         "EVE": _("EVE Online"),
         "ESO": _("The Elder Scrolls Online"),
         "FFXIV": _("Final Fantasy XIV: A Realm Reborn"),
         "GW2": _("Guild Wars 2"),
         "LARK": _("Lost Ark"),
-
         "LEP": _("Last Epoch"),
         "L2": _("Lineage II"),
-        "L2C": _("Lineage II Classic"),
-        "SKY": _("Minecraft: Hypixel SkyBlock"),
         "MO2": _("Mortal Online 2"),
-        "MOE": _("Myth of Empires"),
         "NEW": _("New World"),
         "NWA": _("New World: Aeternum"),
         "POE": _("Path of Exile"),
         "POE2": _("Path of Exile 2"),
         "RO": _("Ragnarok Online"),
-        "RVD": _("Ravendawn"),
         "RS3": _("RuneScape 3"),
         "OSRS": _("Old School RuneScape"),
-        "SWTOR": _("Star Wars: The Old Republic"),
         "TRS": _("Tarisland"),
-        "TIB": _("Tibia"),
         "TL": _("Throne and Liberty"),
-        "VR": _("V Rising"),
-
-        # === SURVIVAL / EXTRACTION (REAL MONEY FARMING) ===
-        "D2": _("Destiny 2"),
-        "EFT": _("Escape from Tarkov"),
-        "RUST": _("Rust"),
-        "TFD": _("The First Descendant"),
-        "WF": _("Warframe"),
     }
 
     # ======================================================================
-    # ✅ CLEANED OLD NAMES — ONLY KEEP GAMES THAT STILL EXIST IN COMMON_NAMES
+    # ✅ OLD NAMES — Only for games that still exist in COMMON_NAMES
     # ======================================================================
     OLD_NAMES = {
         "WOW": [
@@ -111,7 +88,7 @@ class GamesBase:
             _("The Elder Scrolls Online: Tamriel Unlimited"),
         ],
         "GW2": [
-            _("Guild Wars"),
+            _("Guild Wars 1"),
             _("Guild Wars Factions"),
         ],
         "RS3": [
@@ -125,11 +102,14 @@ class GamesBase:
             _("Aion 1.x"),
             _("Aion 2.x"),
         ],
-        "D2": [
-            _("Destiny 2 — Old Seasons"),
+        "POE2": [
+            _("Path of Exile 2 Alpha"),
         ],
-        "BDO": [
-            _("Black Desert Online — Pre-Remaster"),
+        "L2": [
+            _("Lineage II Prelude"),
+        ],
+        "FFXIV": [
+            _("FFXIV 1.0"),
         ],
     }
 

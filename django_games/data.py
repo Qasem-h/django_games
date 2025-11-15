@@ -18,7 +18,7 @@ except ImportError:  # pragma: no cover
 # CANONICAL GAME CODES — COMMUNITY STANDARD (NOV 2025)
 # CLEANED FOR REAL RMT MARKET
 # =======================================================
-GAMES: "Dict[str, StrPromise]" = {
+GAMES = {
 
     # === WORLD OF WARCRAFT RETAIL ===
     "WOW": _("World of Warcraft"),
@@ -38,8 +38,6 @@ GAMES: "Dict[str, StrPromise]" = {
     "WOTLKC": _("World of Warcraft: Wrath of the Lich King Classic"),
     "CATAC": _("World of Warcraft: Cataclysm Classic"),
     "MOPC": _("World of Warcraft: Mists of Pandaria Classic"),
-    "WODC": _("World of Warcraft: Warlords of Draenor Classic"),
-    "LEGC": _("World of Warcraft: Legion Classic"),
 
     # === PRIVATE / SPECIAL ===
     "WOWP": _("World of Warcraft Private Server"),
@@ -47,49 +45,29 @@ GAMES: "Dict[str, StrPromise]" = {
     "TBCCA": _("World of Warcraft: The Burning Crusade Classic Anniversary"),
 
     # === DIABLO SERIES ===
-    "D2R": _("Diablo II: Resurrected"),
-    "D3": _("Diablo III"),
     "D4": _("Diablo IV"),
     "D4VH": _("Diablo IV: Vessel of Hatred"),
 
-    # === MAJOR MMORPGs (GOOD RMT MARKETS) ===
+    # === MAJOR MMORPGs — GOOD RMT ===
     "AION": _("Aion"),
     "AIC": _("Aion Classic"),
     "ALB": _("Albion Online"),
-    "BNS": _("Blade & Soul"),
-    "BDO": _("Black Desert Online"),
-    "EVE": _("EVE Online"),
     "ESO": _("The Elder Scrolls Online"),
     "FFXIV": _("Final Fantasy XIV: A Realm Reborn"),
     "GW2": _("Guild Wars 2"),
     "LARK": _("Lost Ark"),
-
     "LEP": _("Last Epoch"),
     "L2": _("Lineage II"),
-    "L2C": _("Lineage II Classic"),
-    "SKY": _("Minecraft: Hypixel SkyBlock"),
     "MO2": _("Mortal Online 2"),
-    "MOE": _("Myth of Empires"),
     "NEW": _("New World"),
     "NWA": _("New World: Aeternum"),
     "POE": _("Path of Exile"),
     "POE2": _("Path of Exile 2"),
     "RO": _("Ragnarok Online"),
-    "RVD": _("Ravendawn"),
     "RS3": _("RuneScape 3"),
     "OSRS": _("Old School RuneScape"),
-    "SWTOR": _("Star Wars: The Old Republic"),
     "TRS": _("Tarisland"),
-    "TIB": _("Tibia"),
     "TL": _("Throne and Liberty"),
-    "VR": _("V Rising"),
-
-    # === SURVIVAL / EXTRACTION — RMT MARKET ===
-    "D2": _("Destiny 2"),
-    "EFT": _("Escape from Tarkov"),
-    "RUST": _("Rust"),
-    "TFD": _("The First Descendant"),
-    "WF": _("Warframe"),
 }
 
 
@@ -116,17 +94,13 @@ ALT_CODES = {
     "WOTLKC": ("WOTLKC", 211),
     "CATAC": ("CATAC", 212),
     "MOPC": ("MOPC", 213),
-    "WODC": ("WODC", 214),
     "TBCCA": ("TBCCA", 215),
-    "LEGC": ("LEGC", 216),
 
     # === Private ===
     "WOWP": ("WOWP", 240),
     "ANV": ("ANV", 241),
 
     # === Diablo Series ===
-    "D2R": ("D2R", 301),
-    "D3": ("D3", 302),
     "D4": ("D4", 303),
     "D4VH": ("D4VH", 304),
 
@@ -134,8 +108,6 @@ ALT_CODES = {
     "AION": ("AION", 400),
     "AIC": ("AIC", 401),
     "ALB": ("ALB", 402),
-    "BNS": ("BNS", 405),
-    "BDO": ("BDO", 407),
     "EVE": ("EVE", 412),
     "ESO": ("ESO", 413),
     "FFXIV": ("FFXIV", 414),
@@ -143,30 +115,16 @@ ALT_CODES = {
     "LARK": ("LARK", 417),
     "LEP": ("LEP", 418),
     "L2": ("L2", 419),
-    "L2C": ("L2C", 420),
-    "SKY": ("SKY", 421),
     "MO2": ("MO2", 423),
-    "MOE": ("MOE", 424),
     "NEW": ("NEW", 426),
     "NWA": ("NWA", 427),
     "POE": ("POE", 429),
     "POE2": ("POE2", 430),
     "RO": ("RO", 431),
-    "RVD": ("RVD", 432),
     "RS3": ("RS3", 433),
     "OSRS": ("OSRS", 434),
-    "SWTOR": ("SWTOR", 437),
     "TRS": ("TRS", 438),
-    "TIB": ("TIB", 439),
     "TL": ("TL", 440),
-    "VR": ("VR", 441),
-
-    # === SURVIVAL/EXTRACTION/FARMING (500–550) ===
-    "D2": ("D2", 507),
-    "EFT": ("EFT", 509),
-    "RUST": ("RUST", 525),
-    "TFD": ("TFD", 528),
-    "WF": ("WF", 530),
 }
 
 
