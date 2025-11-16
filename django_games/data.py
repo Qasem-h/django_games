@@ -45,6 +45,7 @@ GAMES = {
     "TBCCA": _("World of Warcraft: The Burning Crusade Classic Anniversary"),
 
     # === DIABLO SERIES ===
+    "D2R": _("Diablo II: Resurrected"),  # 🔥 RMT STRONG Runes
     "D4": _("Diablo IV"),
     "D4VH": _("Diablo IV: Vessel of Hatred"),
 
@@ -52,10 +53,13 @@ GAMES = {
     "AION": _("Aion"),
     "AIC": _("Aion Classic"),
     "ALB": _("Albion Online"),
+    "BDO": _("Black Desert Online"),   # 🔥 MUST HAVE
     "ESO": _("The Elder Scrolls Online"),
-    "FFXIV": _("Final Fantasy XIV: A Realm Reborn"),
+    "EVE": _("EVE Online"),           # 🔥 MUST HAVE ISK
+    "FFXIV": _("Final Fantasy XIV"),
     "GW2": _("Guild Wars 2"),
     "LARK": _("Lost Ark"),
+
     "LEP": _("Last Epoch"),
     "L2": _("Lineage II"),
     "MO2": _("Mortal Online 2"),
@@ -67,7 +71,12 @@ GAMES = {
     "RS3": _("RuneScape 3"),
     "OSRS": _("Old School RuneScape"),
     "TRS": _("Tarisland"),
-    "TL": _("Throne and Liberty"),
+    "TNL": _("Throne and Liberty"),
+
+    # === OPTIONAL BUT PROFITABLE ===
+    "EFT": _("Escape from Tarkov"),   # ⭐ Consider adding Roubles
+    "RUST": _("Rust"),                # ⭐ Consider adding
+    "TIB": _("Tibia"),                # 🔥 South America / EU market
 }
 
 
@@ -101,6 +110,7 @@ ALT_CODES = {
     "ANV": ("ANV", 241),
 
     # === Diablo Series ===
+    "D2R": ("D2R", 300),   # ⭐ NEW — Required for Runes
     "D4": ("D4", 303),
     "D4VH": ("D4VH", 304),
 
@@ -108,9 +118,10 @@ ALT_CODES = {
     "AION": ("AION", 400),
     "AIC": ("AIC", 401),
     "ALB": ("ALB", 402),
-    "EVE": ("EVE", 412),
+    "BDO": ("BDO", 403),     # ⭐ NEW — Strong RMT market
     "ESO": ("ESO", 413),
-    "FFXIV": ("FFXIV", 414),
+    "EVE": ("EVE", 414),     # ⭐ FIX: ISK market huge
+    "FFXIV": ("FFXIV", 415),
     "GW2": ("GW2", 416),
     "LARK": ("LARK", 417),
     "LEP": ("LEP", 418),
@@ -124,7 +135,12 @@ ALT_CODES = {
     "RS3": ("RS3", 433),
     "OSRS": ("OSRS", 434),
     "TRS": ("TRS", 438),
-    "TL": ("TL", 440),
+    "TNL": ("TNL", 440),
+
+    # === Strong RMT games added ===
+    "EFT": ("EFT", 509),     # ⭐ NEW — Roubles
+    "RUST": ("RUST", 525),   # ⭐ NEW — Trading items market
+    "TIB": ("TIB", 439),     # ⭐ NEW — Huge in SA/EU
 }
 
 

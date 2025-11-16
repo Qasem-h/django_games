@@ -45,7 +45,8 @@ class GamesBase:
         "WOWP": _("World of Warcraft Private Server"),
         "ANV": _("World of Warcraft Classic Anniversary Edition"),
 
-        # === DIABLO (Only Active RMT Markets) ===
+        # === DIABLO SERIES ===
+        "D2R": _("Diablo II: Resurrected"),  # MUST HAVE — RUNES RMT
         "D4": _("Diablo IV"),
         "D4VH": _("Diablo IV: Vessel of Hatred"),
 
@@ -53,9 +54,10 @@ class GamesBase:
         "AION": _("Aion"),
         "AIC": _("Aion Classic"),
         "ALB": _("Albion Online"),
+        "BDO": _("Black Desert Online"),    # ADDED — huge RMT
         "EVE": _("EVE Online"),
         "ESO": _("The Elder Scrolls Online"),
-        "FFXIV": _("Final Fantasy XIV: A Realm Reborn"),
+        "FFXIV": _("Final Fantasy XIV"),
         "GW2": _("Guild Wars 2"),
         "LARK": _("Lost Ark"),
         "LEP": _("Last Epoch"),
@@ -69,7 +71,12 @@ class GamesBase:
         "RS3": _("RuneScape 3"),
         "OSRS": _("Old School RuneScape"),
         "TRS": _("Tarisland"),
-        "TL": _("Throne and Liberty"),
+        "TNL": _("Throne and Liberty"),
+
+        # === OPTIONAL BUT PROFITABLE ===
+        "EFT": _("Escape from Tarkov"),  # Roubles
+        "RUST": _("Rust"),
+        "TIB": _("Tibia"),               # very strong in SA / EU
     }
 
     # ======================================================================
@@ -110,6 +117,16 @@ class GamesBase:
         ],
         "FFXIV": [
             _("FFXIV 1.0"),
+        ],
+        "D2R": [
+            _("Diablo II Classic"),
+            _("Diablo II Lord of Destruction"),
+        ],
+        "BDO": [
+            _("Black Desert Online Pre-Remastered"),
+        ],
+        "TIB": [
+            _("Tibia 7.x Era"),
         ],
     }
 
