@@ -67,7 +67,6 @@ GAMES = {
     "NWA": _("New World: Aeternum"),
     "POE": _("Path of Exile"),
     "POE2": _("Path of Exile 2"),
-    "RO": _("Ragnarok Online"),
     "RS3": _("RuneScape 3"),
     "OSRS": _("Old School RuneScape"),
     "TRS": _("Tarisland"),
@@ -75,8 +74,7 @@ GAMES = {
 
     # === OPTIONAL BUT PROFITABLE ===
     "EFT": _("Escape from Tarkov"),   # ⭐ Consider adding Roubles
-    "RUST": _("Rust"),                # ⭐ Consider adding
-    "TIB": _("Tibia"),                # 🔥 South America / EU market
+    "ARC": _("ARC Raiders"),                # ⭐ Consider adding
 }
 
 
@@ -131,7 +129,6 @@ ALT_CODES = {
     "NWA": ("NWA", 427),
     "POE": ("POE", 429),
     "POE2": ("POE2", 430),
-    "RO": ("RO", 431),
     "RS3": ("RS3", 433),
     "OSRS": ("OSRS", 434),
     "TRS": ("TRS", 438),
@@ -139,8 +136,7 @@ ALT_CODES = {
 
     # === Strong RMT games added ===
     "EFT": ("EFT", 509),     # ⭐ NEW — Roubles
-    "RUST": ("RUST", 525),   # ⭐ NEW — Trading items market
-    "TIB": ("TIB", 439),     # ⭐ NEW — Huge in SA/EU
+    "ARC": ("ARC", 525),   # ⭐ NEW — Trading items market
 }
 
 

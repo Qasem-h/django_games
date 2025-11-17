@@ -67,7 +67,6 @@ class GamesBase:
         "NWA": _("New World: Aeternum"),
         "POE": _("Path of Exile"),
         "POE2": _("Path of Exile 2"),
-        "RO": _("Ragnarok Online"),
         "RS3": _("RuneScape 3"),
         "OSRS": _("Old School RuneScape"),
         "TRS": _("Tarisland"),
@@ -75,8 +74,7 @@ class GamesBase:
 
         # === OPTIONAL BUT PROFITABLE ===
         "EFT": _("Escape from Tarkov"),  # Roubles
-        "RUST": _("Rust"),
-        "TIB": _("Tibia"),               # very strong in SA / EU
+        "ARC": _("ARC Raiders"),
     }
 
     # ======================================================================
@@ -124,9 +122,6 @@ class GamesBase:
         ],
         "BDO": [
             _("Black Desert Online Pre-Remastered"),
-        ],
-        "TIB": [
-            _("Tibia 7.x Era"),
         ],
     }
 
