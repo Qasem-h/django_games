@@ -17,53 +17,39 @@ class GamesBase:
     """
 
     # ======================================================================
-    # ✅ CANONICAL → FRIENDLY NAMES (HIGH + MEDIUM RMT MARKETS ONLY)
+    # ✅ CANONICAL → FRIENDLY NAMES (FINAL 2025 GAME LIST)
     # ======================================================================
     COMMON_NAMES = {
 
-        # === WORLD OF WARCRAFT RETAIL ===
+        # === WORLD OF WARCRAFT (Retail + Classic + Special) ===
         "WOW": _("World of Warcraft"),
-        "DFL": _("World of Warcraft: Dragonflight"),
         "TWW": _("World of Warcraft: The War Within"),
         "MDN": _("World of Warcraft: Midnight"),
-        "TLT": _("World of Warcraft: The Last Titan"),
-
-        # === WOW CLASSIC ===
-        "WOWC": _("World of Warcraft Classic"),
         "ERA": _("World of Warcraft Classic Era"),
         "HC": _("World of Warcraft Classic Hardcore"),
         "SOD": _("World of Warcraft: Season of Discovery"),
-
-        # === CLASSIC EXPANSIONS ===
-        "TBCC": _("World of Warcraft: The Burning Crusade Classic"),
-        "WOTLKC": _("World of Warcraft: Wrath of the Lich King Classic"),
-        "CATAC": _("World of Warcraft: Cataclysm Classic"),
         "MOPC": _("World of Warcraft: Mists of Pandaria Classic"),
-        "TBCCA": _("World of Warcraft: The Burning Crusade Classic Anniversary"),
-
-        # === PRIVATE / SPECIAL ===
         "WOWP": _("World of Warcraft Private Server"),
         "ANV": _("World of Warcraft Classic Anniversary Edition"),
+        "TBCCA": _("World of Warcraft: The Burning Crusade Classic Anniversary"),
 
         # === DIABLO SERIES ===
-        "D2R": _("Diablo II: Resurrected"),  # MUST HAVE — RUNES RMT
+        "D2R": _("Diablo II: Resurrected"),
         "D4": _("Diablo IV"),
-        "D4VH": _("Diablo IV: Vessel of Hatred"),
 
-        # === TOP MMORPG RMT GAMES ===
+        # === MAJOR MMORPGS ===
         "AION": _("Aion"),
         "AIC": _("Aion Classic"),
         "ALB": _("Albion Online"),
-        "BDO": _("Black Desert Online"),    # ADDED — huge RMT
-        "EVE": _("EVE Online"),
+        "BDO": _("Black Desert Online"),
         "ESO": _("The Elder Scrolls Online"),
+        "EVE": _("EVE Online"),
         "FFXIV": _("Final Fantasy XIV"),
         "GW2": _("Guild Wars 2"),
         "LARK": _("Lost Ark"),
         "LEP": _("Last Epoch"),
         "L2": _("Lineage II"),
         "MO2": _("Mortal Online 2"),
-        "NEW": _("New World"),
         "NWA": _("New World: Aeternum"),
         "POE": _("Path of Exile"),
         "POE2": _("Path of Exile 2"),
@@ -72,56 +58,81 @@ class GamesBase:
         "TRS": _("Tarisland"),
         "TNL": _("Throne and Liberty"),
 
-        # === OPTIONAL BUT PROFITABLE ===
-        "EFT": _("Escape from Tarkov"),  # Roubles
+        # === RMT / PROFITABLE ===
+        "EFT": _("Escape from Tarkov"),
         "ARC": _("ARC Raiders"),
     }
 
     # ======================================================================
-    # ✅ OLD NAMES — Only for games that still exist in COMMON_NAMES
+    # ✅ OLD NAMES — ONLY FOR GAMES THAT STILL EXIST IN COMMON_NAMES
     # ======================================================================
     OLD_NAMES = {
         "WOW": [
             _("World of Warcraft Vanilla"),
             _("World of Warcraft Beta"),
         ],
-        "POE": [
-            _("Path of Exile Closed Beta"),
-            _("Path of Exile Legacy League"),
+        "ERA": [
+            _("World of Warcraft 2019 Classic"),
         ],
-        "ESO": [
-            _("The Elder Scrolls Online: Tamriel Unlimited"),
+        "HC": [
+            _("Classic Hardcore Beta"),
         ],
-        "GW2": [
-            _("Guild Wars 1"),
-            _("Guild Wars Factions"),
+        "MOPC": [
+            _("Pandaria Classic PTR"),
         ],
-        "RS3": [
-            _("RuneScape 2"),
-            _("RuneScape HD"),
+        "WOWP": [
+            _("Private Server Custom Version"),
         ],
-        "OSRS": [
-            _("RuneScape 2007"),
+        "ANV": [
+            _("WoW Anniversary Edition 2024"),
         ],
-        "AION": [
-            _("Aion 1.x"),
-            _("Aion 2.x"),
+        "TBCCA": [
+            _("TBC Classic 2021"),
         ],
-        "POE2": [
-            _("Path of Exile 2 Alpha"),
-        ],
-        "L2": [
-            _("Lineage II Prelude"),
-        ],
-        "FFXIV": [
-            _("FFXIV 1.0"),
-        ],
+
         "D2R": [
             _("Diablo II Classic"),
             _("Diablo II Lord of Destruction"),
         ],
+        "D4": [
+            _("Diablo IV Pre-Season"),
+        ],
+
+        "AION": [
+            _("Aion 1.x"),
+        ],
+        "AIC": [
+            _("Aion Classic 2.0"),
+        ],
+        "ALB": [
+            _("Albion Early Access"),
+        ],
         "BDO": [
             _("Black Desert Online Pre-Remastered"),
+        ],
+        "ESO": [
+            _("ESO: Tamriel Unlimited"),
+        ],
+        "GW2": [
+            _("Guild Wars 1"),
+        ],
+        "RS3": [
+            _("RuneScape 2"),
+        ],
+        "OSRS": [
+            _("RuneScape 2007"),
+        ],
+        "POE": [
+            _("Path of Exile Legacy League"),
+        ],
+        "POE2": [
+            _("Path of Exile 2 Alpha"),
+        ],
+        "FFXIV": [
+            _("FFXIV 1.0"),
+        ],
+        "L2": [
+            _("Lineage II Prelude"),
         ],
     }
 

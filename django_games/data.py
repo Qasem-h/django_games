@@ -20,42 +20,26 @@ except ImportError:  # pragma: no cover
 # =======================================================
 GAMES = {
 
-    # === WORLD OF WARCRAFT RETAIL ===
     "WOW": _("World of Warcraft"),
-    "DFL": _("World of Warcraft: Dragonflight"),
     "TWW": _("World of Warcraft: The War Within"),
     "MDN": _("World of Warcraft: Midnight"),
-    "TLT": _("World of Warcraft: The Last Titan"),
-
-    # === WORLD OF WARCRAFT CLASSIC ===
-    "WOWC": _("World of Warcraft Classic"),
     "ERA": _("World of Warcraft Classic Era"),
     "HC": _("World of Warcraft Classic Hardcore"),
     "SOD": _("World of Warcraft: Season of Discovery"),
-
-    # === CLASSIC EXPANSIONS ===
-    "TBCC": _("World of Warcraft: The Burning Crusade Classic"),
-    "WOTLKC": _("World of Warcraft: Wrath of the Lich King Classic"),
-    "CATAC": _("World of Warcraft: Cataclysm Classic"),
     "MOPC": _("World of Warcraft: Mists of Pandaria Classic"),
-
-    # === PRIVATE / SPECIAL ===
     "WOWP": _("World of Warcraft Private Server"),
     "ANV": _("World of Warcraft Classic Anniversary Edition"),
     "TBCCA": _("World of Warcraft: The Burning Crusade Classic Anniversary"),
 
-    # === DIABLO SERIES ===
-    "D2R": _("Diablo II: Resurrected"),  # 🔥 RMT STRONG Runes
+    "D2R": _("Diablo II: Resurrected"),
     "D4": _("Diablo IV"),
-    "D4VH": _("Diablo IV: Vessel of Hatred"),
 
-    # === MAJOR MMORPGs — GOOD RMT ===
     "AION": _("Aion"),
     "AIC": _("Aion Classic"),
     "ALB": _("Albion Online"),
-    "BDO": _("Black Desert Online"),   # 🔥 MUST HAVE
+    "BDO": _("Black Desert Online"),
     "ESO": _("The Elder Scrolls Online"),
-    "EVE": _("EVE Online"),           # 🔥 MUST HAVE ISK
+    "EVE": _("EVE Online"),
     "FFXIV": _("Final Fantasy XIV"),
     "GW2": _("Guild Wars 2"),
     "LARK": _("Lost Ark"),
@@ -63,7 +47,6 @@ GAMES = {
     "LEP": _("Last Epoch"),
     "L2": _("Lineage II"),
     "MO2": _("Mortal Online 2"),
-    "NEW": _("New World"),
     "NWA": _("New World: Aeternum"),
     "POE": _("Path of Exile"),
     "POE2": _("Path of Exile 2"),
@@ -72,10 +55,10 @@ GAMES = {
     "TRS": _("Tarisland"),
     "TNL": _("Throne and Liberty"),
 
-    # === OPTIONAL BUT PROFITABLE ===
-    "EFT": _("Escape from Tarkov"),   # ⭐ Consider adding Roubles
-    "ARC": _("ARC Raiders"),                # ⭐ Consider adding
+    "EFT": _("Escape from Tarkov"),
+    "ARC": _("ARC Raiders"),
 }
+
 
 
 # =======================================================
@@ -83,49 +66,35 @@ GAMES = {
 # =======================================================
 ALT_CODES = {
 
-    # === WoW Retail ===
     "WOW": ("WOW", 100),
-    "DFL": ("DFL", 101),
     "TWW": ("TWW", 102),
     "MDN": ("MDN", 103),
-    "TLT": ("TLT", 104),
 
-    # === WoW Classic ===
-    "WOWC": ("WOWC", 200),
     "ERA": ("ERA", 201),
     "HC": ("HC", 202),
     "SOD": ("SOD", 203),
-
-    # === Classic Expansions ===
-    "TBCC": ("TBCC", 210),
-    "WOTLKC": ("WOTLKC", 211),
-    "CATAC": ("CATAC", 212),
     "MOPC": ("MOPC", 213),
-    "TBCCA": ("TBCCA", 215),
 
-    # === Private ===
     "WOWP": ("WOWP", 240),
     "ANV": ("ANV", 241),
+    "TBCCA": ("TBCCA", 215),
 
-    # === Diablo Series ===
-    "D2R": ("D2R", 300),   # ⭐ NEW — Required for Runes
+    "D2R": ("D2R", 300),
     "D4": ("D4", 303),
-    "D4VH": ("D4VH", 304),
 
-    # === MMORPGs (400–499) ===
     "AION": ("AION", 400),
     "AIC": ("AIC", 401),
     "ALB": ("ALB", 402),
-    "BDO": ("BDO", 403),     # ⭐ NEW — Strong RMT market
+    "BDO": ("BDO", 403),
     "ESO": ("ESO", 413),
-    "EVE": ("EVE", 414),     # ⭐ FIX: ISK market huge
+    "EVE": ("EVE", 414),
     "FFXIV": ("FFXIV", 415),
     "GW2": ("GW2", 416),
     "LARK": ("LARK", 417),
+
     "LEP": ("LEP", 418),
     "L2": ("L2", 419),
     "MO2": ("MO2", 423),
-    "NEW": ("NEW", 426),
     "NWA": ("NWA", 427),
     "POE": ("POE", 429),
     "POE2": ("POE2", 430),
@@ -134,9 +103,8 @@ ALT_CODES = {
     "TRS": ("TRS", 438),
     "TNL": ("TNL", 440),
 
-    # === Strong RMT games added ===
-    "EFT": ("EFT", 509),     # ⭐ NEW — Roubles
-    "ARC": ("ARC", 525),   # ⭐ NEW — Trading items market
+    "EFT": ("EFT", 509),
+    "ARC": ("ARC", 525),
 }
 
 
